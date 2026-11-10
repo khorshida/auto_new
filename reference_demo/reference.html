@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Auto Museum Ltd — Website UI Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&family=Inter:wght@300;400;500;600;700&family=Hind+Siliguri:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0b0d; --bg2:#121216; --card:#17171c; --line:#26262d; --text:#ececef; --muted:#9a9aa5;
+  --gold:#c9a24d; --gold2:#e6c77a; --wa:#25d366; --red:#e05252; --blue:#4f8cff; --green:#3ecf8e;
+  --serif:'Playfair Display',Georgia,serif; --sans:'Inter','Hind Siliguri',system-ui,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;line-height:1.6;overflow-x:hidden}
+body.bn{font-family:'Hind Siliguri','Inter',sans-serif}
+a{color:inherit;text-decoration:none;cursor:pointer}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px;background:#0f0f13;border:1px solid var(--line);color:var(--text);padding:11px 13px;border-radius:8px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold)}
+label{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px}
+.wrap{max-width:1240px;margin:0 auto;padding:0 20px}
+.serif{font-family:var(--serif)}
+.gold{color:var(--gold)}
+.muted{color:var(--muted)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:999px;border:1px solid var(--gold);background:var(--gold);color:#111;font-weight:600;font-size:14px;transition:.2s}
+.btn:hover{background:var(--gold2);border-color:var(--gold2)}
+.btn.ghost{background:transparent;color:var(--text);border-color:#444}
+.btn.ghost:hover{border-color:var(--gold);color:var(--gold)}
+.btn.wa{background:var(--wa);border-color:var(--wa);color:#04210f}
+.btn.sm{padding:8px 14px;font-size:13px}
+.tag{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:rgba(201,162,77,.14);color:var(--gold2);border:1px solid rgba(201,162,77,.3)}
+.eyebrow{font-size:12px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold)}
+h1,h2,h3{font-weight:600;line-height:1.15}
+h2.sec{font-family:var(--serif);font-size:clamp(28px,4vw,44px);margin:10px 0 14px}
+section{padding:80px 0}
+.grid{display:grid;gap:22px}
+
+/* demo bar */
+.demobar{background:linear-gradient(90deg,#1d1606,#2b2008);border-bottom:1px solid #3a2d10;font-size:12.5px;padding:7px 0;color:var(--gold2)}
+.demobar .wrap{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center}
+.demobar a{text-decoration:underline;margin-left:12px}
+
+/* header */
+header.site{position:sticky;top:0;z-index:50;background:rgba(11,11,13,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header.site .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{width:40px;height:40px;border-radius:10px;border:1.5px solid var(--gold);display:grid;place-items:center;font-family:var(--serif);font-weight:700;color:var(--gold);font-size:18px}
+.logo b{font-family:var(--serif);font-size:20px;letter-spacing:.06em;display:block;line-height:1}
+.logo small{font-size:10px;letter-spacing:.3em;color:var(--muted);text-transform:uppercase}
+nav.main{display:flex;gap:26px}
+nav.main a{font-size:14px;color:#cfcfd6;position:relative;padding:6px 0}
+nav.main a.active,nav.main a:hover{color:var(--gold)}
+nav.main a.active::after{content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;background:var(--gold)}
+.hdr-actions{display:flex;gap:10px;align-items:center}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--text);display:grid;place-items:center;position:relative}
+.icon-btn:hover{border-color:var(--gold);color:var(--gold)}
+.badge{position:absolute;top:-4px;right:-4px;background:var(--gold);color:#111;font-size:10px;font-weight:700;border-radius:999px;min-width:18px;height:18px;display:grid;place-items:center;padding:0 4px}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.lang button{background:none;border:0;color:var(--muted);padding:7px 11px;font-size:12px;font-weight:600}
+.lang button.on{background:var(--gold);color:#111}
+.burger{display:none}
+@media(max-width:980px){nav.main{display:none;position:absolute;top:72px;left:0;right:0;flex-direction:column;background:#0e0e11;padding:16px 20px;gap:6px;border-bottom:1px solid var(--line)}nav.main.open{display:flex}.burger{display:grid}.hide-m{display:none!important}}
+
+/* pages */
+.page{display:none;animation:fade .35s ease}
+.page.show{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* hero */
+.hero{position:relative;height:calc(100vh - 110px);min-height:560px;overflow:hidden;display:flex;align-items:flex-end}
+.hero .slides{position:absolute;inset:0}
+.hero .slides div{position:absolute;inset:0;background-size:cover;background-position:center;opacity:0;animation:kb 18s infinite}
+.hero .slides div:nth-child(2){animation-delay:6s}
+.hero .slides div:nth-child(3){animation-delay:12s}
+@keyframes kb{0%{opacity:0;transform:scale(1.12)}6%{opacity:1}33%{opacity:1}40%{opacity:0;transform:scale(1)}100%{opacity:0}}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,11,13,.2) 0%,rgba(11,11,13,.35) 45%,rgba(11,11,13,.96) 100%)}
+.hero .content{position:relative;z-index:2;padding-bottom:70px;width:100%}
+.hero h1{font-family:var(--serif);font-size:clamp(40px,7vw,86px);font-weight:500;max-width:900px;line-height:1.02}
+.hero h1 i{color:var(--gold)}
+.hero p{max-width:560px;color:#d2d2d8;margin:18px 0 28px;font-size:17px}
+.video-chip{position:absolute;top:24px;right:24px;z-index:3;display:flex;align-items:center;gap:8px;background:rgba(0,0,0,.5);border:1px solid #444;padding:8px 14px;border-radius:999px;font-size:12px}
+.video-chip span{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1.4s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.scroll-cue{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:3;font-size:11px;letter-spacing:.3em;color:var(--muted)}
+
+/* discover */
+.discover{margin-top:-46px;position:relative;z-index:5}
+.finder{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:0 30px 60px rgba(0,0,0,.5)}
+.finder .tabs{display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:transparent;color:#cfcfd6;padding:8px 16px;border-radius:999px;font-size:13px}
+.chip.on,.chip:hover{border-color:var(--gold);color:var(--gold)}
+.chip.on{background:rgba(201,162,77,.12)}
+.finder .row{display:grid;grid-template-columns:repeat(4,1fr) auto;gap:12px;align-items:end}
+@media(max-width:860px){.finder .row{grid-template-columns:1fr 1fr}}
+
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:22px}
+.quick a{background:var(--bg2);border:1px solid var(--line);border-radius:14px;padding:18px;display:flex;gap:14px;align-items:center;transition:.2s}
+.quick a:hover{border-color:var(--gold);transform:translateY(-3px)}
+.quick .ic{width:44px;height:44px;border-radius:12px;background:rgba(201,162,77,.12);display:grid;place-items:center;color:var(--gold);flex-shrink:0}
+.quick b{display:block;font-size:14px}.quick small{color:var(--muted);font-size:12px}
+@media(max-width:860px){.quick{grid-template-columns:1fr 1fr}}
+
+/* story */
+.story{display:grid;grid-template-columns:1.05fr 1fr;gap:60px;align-items:center}
+.story .img{aspect-ratio:4/5;border-radius:20px;background-size:cover;background-position:center;position:relative}
+.story .img .stamp{position:absolute;bottom:-26px;right:-26px;background:var(--gold);color:#111;border-radius:16px;padding:20px 24px;font-family:var(--serif)}
+.stamp b{font-size:40px;display:block;line-height:1}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:30px}
+.stats div{border-top:1px solid var(--line);padding-top:14px}
+.stats b{font-family:var(--serif);font-size:32px;color:var(--gold)}
+@media(max-width:860px){.story{grid-template-columns:1fr}.story .img .stamp{right:10px}}
+
+/* car cards */
+.cars{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.car{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;transition:.25s;display:flex;flex-direction:column}
+.car:hover{border-color:#3a3a44;transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,.4)}
+.car .ph{aspect-ratio:16/10;position:relative;overflow:hidden;background:#1d1d23;cursor:pointer}
+.car .ph img{width:100%;height:100%;object-fit:cover;transition:.5s}
+.car:hover .ph img{transform:scale(1.06)}
+.car .ph .tag{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.65);backdrop-filter:blur(6px)}
+.car .ph .st{position:absolute;top:12px;right:12px;font-size:11px;padding:4px 10px;border-radius:999px;font-weight:600}
+.st.Available{background:rgba(62,207,142,.2);color:var(--green)}
+.st.Reserved{background:rgba(230,180,60,.2);color:#f0c050}
+.st.Sold{background:rgba(224,82,82,.2);color:var(--red)}
+.car .body{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column}
+.car h3{font-family:var(--serif);font-size:20px;cursor:pointer}
+.car .meta{color:var(--muted);font-size:13px;margin:4px 0 12px}
+.car .price{font-size:17px;font-weight:700;color:var(--gold2)}
+.car .foot{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:12px;border-top:1px solid var(--line);gap:8px}
+.car .acts{display:flex;gap:6px}
+.mini{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:transparent;color:var(--muted);display:grid;place-items:center}
+.mini:hover,.mini.on{border-color:var(--gold);color:var(--gold)}
+.mini.wa{color:var(--wa)}
+.cmp-check{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);margin-top:10px;cursor:pointer;user-select:none}
+.cmp-check input{width:auto}
+
+/* brands */
+.marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0;background:var(--bg2)}
+.marquee .track{display:flex;gap:70px;width:max-content;animation:mq 30s linear infinite}
+.marquee span{font-family:var(--serif);font-size:24px;color:#6e6e78;white-space:nowrap;letter-spacing:.08em;cursor:pointer}
+.marquee span:hover{color:var(--gold)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* CTA band */
+.cta{background:linear-gradient(120deg,#1a150a,#0f0f12 60%);border:1px solid #3a2d10;border-radius:24px;padding:50px;display:flex;justify-content:space-between;align-items:center;gap:30px;flex-wrap:wrap}
+
+/* inventory */
+.page-head{padding:50px 0 30px;border-bottom:1px solid var(--line);background:radial-gradient(ellipse at top right,rgba(201,162,77,.12),transparent 60%)}
+.crumb{font-size:12px;color:var(--muted);margin-bottom:10px}
+.inv{display:grid;grid-template-columns:270px 1fr;gap:28px;padding:30px 0 80px}
+.filters{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;height:fit-content;position:sticky;top:90px}
+.filters .f{margin-bottom:16px}
+.filters h4{font-size:14px;margin-bottom:14px;display:flex;justify-content:space-between}
+.range-out{font-size:12px;color:var(--gold2);margin-top:4px}
+input[type=range]{padding:0;accent-color:var(--gold);border:0;background:none}
+.inv-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:12px;flex-wrap:wrap}
+@media(max-width:900px){.inv{grid-template-columns:1fr}.filters{position:static}}
+
+/* compare tray */
+.tray{position:fixed;bottom:0;left:0;right:0;z-index:60;background:#141418;border-top:1px solid var(--gold);padding:12px 0;transform:translateY(110%);transition:.3s}
+.tray.show{transform:none}
+.tray .wrap{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.tray .slot{display:flex;align-items:center;gap:8px;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px}
+.tray .slot img{width:46px;height:30px;object-fit:cover;border-radius:4px}
+
+/* detail */
+.detail{display:grid;grid-template-columns:1.4fr 1fr;gap:34px;padding:30px 0 80px}
+.gallery .main{aspect-ratio:16/10;border-radius:16px;overflow:hidden;position:relative;background:#1d1d23}
+.gallery .main img{width:100%;height:100%;object-fit:cover}
+.gallery .thumbs{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:10px}
+.gallery .thumbs div{aspect-ratio:16/10;border-radius:8px;overflow:hidden;cursor:pointer;border:2px solid transparent;position:relative}
+.gallery .thumbs div.on{border-color:var(--gold)}
+.gallery .thumbs img{width:100%;height:100%;object-fit:cover}
+.v360{position:absolute;bottom:14px;left:14px;display:flex;gap:8px}
+.v360 button{background:rgba(0,0,0,.65);border:1px solid #555;color:#fff;padding:7px 12px;border-radius:999px;font-size:12px}
+.side-card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;position:sticky;top:90px}
+.specs{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:22px 0}
+.specs div{background:var(--card);padding:14px}
+.specs small{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;display:block}
+.specs b{font-size:15px}
+.tabs2{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:30px 0 18px;overflow-x:auto}
+.tabs2 button{background:none;border:0;color:var(--muted);padding:12px 16px;border-bottom:2px solid transparent;white-space:nowrap}
+.tabs2 button.on{color:var(--gold);border-color:var(--gold)}
+.feat{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px}
+.feat div::before{content:"✓ ";color:var(--gold)}
+@media(max-width:900px){.detail{grid-template-columns:1fr}.side-card{position:static}.specs{grid-template-columns:1fr 1fr}}
+
+/* EMI */
+.emi{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:34px}
+.emi .out{background:linear-gradient(160deg,#1c170b,#111114);border:1px solid #3a2d10;border-radius:14px;padding:26px;display:flex;flex-direction:column;justify-content:center}
+.emi .big{font-family:var(--serif);font-size:44px;color:var(--gold)}
+.emi .bars{display:flex;height:12px;border-radius:999px;overflow:hidden;margin:18px 0 10px}
+.emi .rows div{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.sl{margin-bottom:20px}
+.sl .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.sl .top b{color:var(--gold2)}
+@media(max-width:860px){.emi{grid-template-columns:1fr}}
+/* loan page */
+.ln-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:24px}
+.ln-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px}
+.ln-step{display:flex;align-items:center;gap:10px;font-weight:600;font-size:14px;margin-bottom:12px}
+.ln-step span{width:24px;height:24px;border-radius:50%;background:var(--gold);color:#111;display:grid;place-items:center;font-size:12px;font-weight:700}
+.ln-money{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;background:#0f0f13;padding:0 14px}
+.ln-money:focus-within{border-color:var(--gold)}
+.ln-money span{color:var(--muted);font-size:14px;font-weight:600}
+.ln-money input{border:0;background:none;font-size:26px;font-weight:700;color:var(--gold2);padding:12px 10px;font-family:var(--serif)}
+.ln-money.sm input{font-size:17px;padding:9px 8px;font-family:var(--sans)}
+.ln-help{font-size:12px;color:var(--muted);margin-top:6px}
+.ln-chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+.ln-chips button{border:1px solid var(--line);background:transparent;color:var(--text);padding:8px 14px;border-radius:999px;font-size:13px}
+.ln-chips button:hover{border-color:var(--gold)}
+.ln-chips button.on{background:var(--gold);border-color:var(--gold);color:#111;font-weight:700}
+.ln-row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:center}
+.ln-res{background:linear-gradient(160deg,#1c170b,#111114 70%);border:1px solid #3a2d10;border-radius:18px;padding:28px}
+.ln-big{font-family:var(--serif);font-size:clamp(38px,5vw,54px);color:var(--gold);line-height:1.1;margin:4px 0}
+.ln-big small{font-size:18px;color:var(--muted);font-family:var(--sans)}
+.ln-journey{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:6px;align-items:center;margin:22px 0;text-align:center}
+.ln-journey>div:not(.ar){background:rgba(0,0,0,.35);border:1px solid #3a2d10;border-radius:12px;padding:12px 6px}
+.ln-journey i{font-style:normal;color:var(--gold);font-size:18px;display:block}
+.ln-journey small{display:block;color:var(--muted);font-size:11.5px;line-height:1.3;margin:4px 0}
+.ln-journey b{font-size:14px}
+.ln-journey .ar{color:var(--gold)}
+.ln-donut{display:flex;align-items:center;gap:20px;margin:6px 0 14px}
+.ln-donut circle{transition:stroke-dasharray .4s,stroke-dashoffset .4s}
+.ln-legend{flex:1;font-size:13px}
+.ln-legend div{display:flex;align-items:center;gap:8px;padding:5px 0}
+.ln-legend span{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+.ln-legend b{margin-left:auto}
+.ln-sum div{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px dashed #3a2d10;font-size:14px}
+.ln-sum span{color:var(--muted)}
+.ln-sum .tot b{font-size:20px;color:var(--gold2)}
+.ln-tenures{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:16px}
+.ln-tenures div{border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;transition:.2s}
+.ln-tenures div:hover{border-color:var(--gold)}
+.ln-tenures div.on{border-color:var(--gold);background:rgba(201,162,77,.1)}
+.ln-tenures small{color:var(--muted);font-size:12px;display:block}
+.ln-tenures b{display:block;font-size:16px;color:var(--gold2);margin:4px 0}
+@media(max-width:960px){.ln-grid{grid-template-columns:1fr}.ln-tenures{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:520px){.ln-journey{grid-template-columns:1fr}.ln-journey .ar{transform:rotate(90deg)}.ln-tenures{grid-template-columns:1fr 1fr}.ln-donut{flex-direction:column}}
+@media print{.demobar,header.site,footer.site,.fab-wa,.tray,.page:not(#p-loan){display:none!important}#p-loan{display:block!important}}
+
+/* compare page */
+.cmp-pick{display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center}
+.vs{width:58px;height:58px;border-radius:50%;border:1px solid var(--gold);display:grid;place-items:center;font-family:var(--serif);color:var(--gold);font-size:20px}
+.cmp-card{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.cmp-card img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block}
+.cmp-card .in{padding:16px}
+table.ct{width:100%;border-collapse:collapse;margin-top:26px;background:var(--card);border-radius:14px;overflow:hidden}
+table.ct td,table.ct th{padding:14px 18px;border-bottom:1px solid var(--line);text-align:center}
+table.ct td:first-child{text-align:left;color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.06em}
+table.ct td.win{color:var(--green);font-weight:600}
+table.ct td.win::after{content:" ▲";font-size:10px}
+.barcmp{height:8px;background:#222;border-radius:999px;margin-top:6px;overflow:hidden}
+.barcmp i{display:block;height:100%;background:var(--gold)}
+@media(max-width:760px){.cmp-pick{grid-template-columns:1fr}.vs{margin:auto}}
+
+/* forms / booking */
+.form-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.f2 .full{grid-column:1/-1}
+@media(max-width:640px){.f2{grid-template-columns:1fr}}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;text-align:center}
+.cal .h{font-size:11px;color:var(--muted);padding:6px 0}
+.cal .d{padding:10px 0;border-radius:8px;border:1px solid var(--line);font-size:14px;cursor:pointer}
+.cal .d:hover{border-color:var(--gold)}
+.cal .d.off{opacity:.25;pointer-events:none}
+.cal .d.sel{background:var(--gold);color:#111;font-weight:700;border-color:var(--gold)}
+.slots{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.slots button{border:1px solid var(--line);background:transparent;color:var(--text);padding:8px 14px;border-radius:8px;font-size:13px}
+.slots button.sel{background:var(--gold);color:#111;border-color:var(--gold)}
+.slots button.full{opacity:.3;text-decoration:line-through;pointer-events:none}
+
+/* checkout */
+.steps{display:flex;gap:8px;margin-bottom:26px}
+.steps div{flex:1;padding:12px;border-radius:10px;border:1px solid var(--line);font-size:13px;color:var(--muted)}
+.steps div.on{border-color:var(--gold);color:var(--gold)}
+.steps div.done{border-color:var(--green);color:var(--green)}
+.pay{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.pay label{border:1px solid var(--line);border-radius:12px;padding:16px 10px;text-align:center;cursor:pointer;text-transform:none;letter-spacing:0;font-size:14px;color:var(--text);margin:0}
+.pay input{display:none}
+.pay input:checked+label{border-color:var(--gold);background:rgba(201,162,77,.1);color:var(--gold)}
+@media(max-width:640px){.pay{grid-template-columns:1fr 1fr}}
+
+/* footer */
+footer.site{border-top:1px solid var(--line);padding:60px 0 30px;background:#09090b}
+footer .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px}
+footer h5{font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+footer li{list-style:none;margin-bottom:8px;color:#bdbdc5;font-size:14px}
+footer li a:hover{color:var(--gold)}
+.copy{border-top:1px solid var(--line);margin-top:40px;padding-top:20px;display:flex;justify-content:space-between;font-size:12px;color:var(--muted);flex-wrap:wrap;gap:10px}
+@media(max-width:860px){footer .cols{grid-template-columns:1fr 1fr}}
+
+.fab-wa{position:fixed;right:22px;bottom:22px;z-index:55;width:58px;height:58px;border-radius:50%;background:var(--wa);display:grid;place-items:center;box-shadow:0 10px 30px rgba(37,211,102,.4);color:#fff}
+.fab-wa::after{content:"";position:absolute;inset:-6px;border-radius:50%;border:2px solid var(--wa);animation:ring 2s infinite}
+@keyframes ring{to{transform:scale(1.35);opacity:0}}
+
+/* modal + toast */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:100;display:none;place-items:center;padding:20px}
+.modal.show{display:grid}
+.modal .box{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:30px;max-width:480px;width:100%;position:relative;animation:fade .25s}
+.modal .x{position:absolute;top:12px;right:14px;background:none;border:0;color:var(--muted);font-size:24px}
+.toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%) translateY(150%);background:#1f1f25;border:1px solid var(--gold);padding:14px 22px;border-radius:12px;z-index:120;transition:.35s;font-size:14px;max-width:90vw}
+.toast.show{transform:translateX(-50%)}
+
+/* ========== CRM ========== */
+#crm{display:none;min-height:100vh;background:#0d0e12}
+#crm.show{display:grid;grid-template-columns:240px 1fr}
+.crm-side{background:#0a0b0e;border-right:1px solid var(--line);padding:20px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
+.crm-side a{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:9px;color:#b8b8c2;font-size:14px;margin-bottom:2px}
+.crm-side a.on,.crm-side a:hover{background:rgba(201,162,77,.1);color:var(--gold)}
+.crm-side .cnt{margin-left:auto;background:var(--red);color:#fff;font-size:10px;border-radius:999px;padding:1px 7px}
+.crm-main{padding:26px 30px;min-width:0}
+.crm-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;gap:12px;flex-wrap:wrap}
+.crm-top h2{font-size:24px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:22px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.kpi small{color:var(--muted);font-size:12px}
+.kpi b{display:block;font-size:28px;margin:4px 0}
+.kpi .up{color:var(--green);font-size:12px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px;margin-bottom:20px}
+.panel h3{font-size:16px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between}
+.flow .node{flex:1;min-width:150px;background:#111216;border:1px solid var(--line);border-radius:12px;padding:16px;text-align:center}
+.flow .node b{display:block;font-size:14px;margin-top:6px}
+.flow .node small{color:var(--muted);font-size:12px}
+.flow .arr{color:var(--gold);font-size:22px}
+.flow .node.wa{border-color:var(--wa)}.flow .node.cr{border-color:var(--gold)}.flow .node.sp{border-color:var(--blue)}
+table.dt{width:100%;border-collapse:collapse;font-size:13.5px}
+table.dt th{text-align:left;color:var(--muted);font-weight:500;font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;padding:10px;border-bottom:1px solid var(--line)}
+table.dt td{padding:11px 10px;border-bottom:1px solid #1f1f25;vertical-align:middle}
+table.dt tr:hover td{background:#1a1a20}
+table.dt select,table.dt input{padding:6px 8px;font-size:13px;width:auto}
+.src{font-size:11px;padding:3px 8px;border-radius:999px;font-weight:600;white-space:nowrap}
+.src.WhatsApp{background:rgba(37,211,102,.15);color:var(--wa)}
+.src.Website{background:rgba(79,140,255,.15);color:var(--blue)}
+.src.TestDrive{background:rgba(201,162,77,.15);color:var(--gold2)}
+.src.Facebook{background:rgba(120,120,255,.15);color:#9a9aff}
+.pill{font-size:11px;padding:3px 9px;border-radius:999px;font-weight:600}
+.pill.New{background:rgba(79,140,255,.18);color:var(--blue)}
+.pill.Contacted{background:rgba(201,162,77,.18);color:var(--gold2)}
+.pill.Follow-up{background:rgba(240,150,60,.18);color:#f0a050}
+.pill.Closed{background:rgba(62,207,142,.18);color:var(--green)}
+.av{width:30px;height:30px;border-radius:50%;display:inline-grid;place-items:center;font-size:12px;font-weight:700;color:#111}
+.crm-view{display:none}.crm-view.show{display:block;animation:fade .3s}
+.two{display:grid;grid-template-columns:1.5fr 1fr;gap:20px}
+.sp-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.sp-card{background:#111216;border:1px solid var(--line);border-radius:12px;padding:16px}
+.sp-card .row{display:flex;gap:10px;align-items:center;margin-bottom:12px}
+.prog{height:6px;background:#222;border-radius:999px;overflow:hidden;margin-top:6px}
+.prog i{display:block;height:100%;background:var(--gold)}
+.crm-cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.crm-cal .h{font-size:11px;color:var(--muted);text-align:center;padding:4px}
+.crm-cal .c{min-height:92px;background:#111216;border:1px solid var(--line);border-radius:8px;padding:6px;font-size:12px;cursor:pointer}
+.crm-cal .c:hover{border-color:var(--gold)}
+.crm-cal .c.today{border-color:var(--gold)}
+.crm-cal .c.blank{background:transparent;border:0;cursor:default}
+.crm-cal .ev{display:block;font-size:10.5px;margin-top:3px;padding:2px 5px;border-radius:4px;background:rgba(201,162,77,.18);color:var(--gold2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:#121318;border-left:1px solid var(--line);z-index:90;transform:translateX(100%);transition:.3s;padding:24px;overflow-y:auto}
+.drawer.show{transform:none}
+.tl{border-left:2px solid var(--line);margin:10px 0 0 8px;padding-left:18px}
+.tl div{position:relative;margin-bottom:16px;font-size:13.5px}
+.tl div::before{content:"";position:absolute;left:-25px;top:5px;width:12px;height:12px;border-radius:50%;background:var(--gold);border:2px solid #121318}
+.tl small{color:var(--muted);display:block}
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kcol{background:#111216;border:1px solid var(--line);border-radius:12px;padding:10px;min-height:200px}
+.kcol h4{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:4px 4px 10px;display:flex;justify-content:space-between}
+.kcard{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:10px;margin-bottom:8px;font-size:13px;cursor:pointer}
+.kcard:hover{border-color:var(--gold)}
+@media(max-width:1000px){#crm.show{grid-template-columns:1fr}.crm-side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;gap:4px}.crm-side .brand,.crm-side .bottom{display:none}.kpis{grid-template-columns:1fr 1fr}.two,.kanban{grid-template-columns:1fr}.crm-main{padding:18px}.crm-cal .c{min-height:60px}}
+.tbl-wrap{overflow-x:auto}
+</style>
+</head>
+<body>
+
+<!-- ============ PUBLIC WEBSITE ============ -->
+<div id="site">
+<div class="demobar"><div class="wrap"><span>★ UI Design Demo — Auto Museum Ltd · Prepared by Endeavours Corporation Ltd.</span><span><a onclick="go('home')">Website</a><a onclick="openCRM()">Open CRM Dashboard →</a></span></div></div>
+
+<header class="site">
+ <div class="wrap">
+  <a class="logo" onclick="go('home')"><div class="logo-mark">AM</div><div><b>AUTO MUSEUM</b><small>Curated Automobiles</small></div></a>
+  <nav class="main" id="nav">
+   <a data-p="home" onclick="go('home')" data-i18n="nav_home">Home</a>
+   <a data-p="inventory" onclick="go('inventory')" data-i18n="nav_inv">Inventory</a>
+   <a data-p="compare" onclick="go('compare')" data-i18n="nav_cmp">Compare</a>
+   <a data-p="loan" onclick="go('loan')" data-i18n="nav_loan">Car Loan</a>
+   <a data-p="testdrive" onclick="go('testdrive')" data-i18n="nav_td">Test Drive</a>
+   <a data-p="sell" onclick="go('sell')" data-i18n="nav_sell">Sell Your Car</a>
+   <a data-p="about" onclick="go('about')" data-i18n="nav_about">About</a>
+   <a data-p="contact" onclick="go('contact')" data-i18n="nav_contact">Contact</a>
+  </nav>
+  <div class="hdr-actions">
+   <div class="lang"><button class="on" onclick="setLang('en',this)">EN</button><button onclick="setLang('bn',this)">বাং</button></div>
+   <button class="icon-btn hide-m" title="Search" onclick="go('inventory');setTimeout(()=>document.getElementById('fq').focus(),300)"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></button>
+   <button class="icon-btn" title="Wishlist" onclick="showWishlist()"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 21s-7-4.5-9.5-9A5.5 5.5 0 0 1 12 6a5.5 5.5 0 0 1 9.5 6c-2.5 4.5-9.5 9-9.5 9z"/></svg><span class="badge" id="wlCount">0</span></button>
+   <button class="icon-btn burger" onclick="document.getElementById('nav').classList.toggle('open')"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+ </div>
+</header>
+
+<!-- HOME -->
+<div class="page show" id="p-home">
+ <div class="hero">
+  <div class="slides">
+   <div style="background-image:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1800&q=80')"></div>
+   <div style="background-image:url('https://images.unsplash.com/photo-1555215695-3004980ad54e?w=1800&q=80')"></div>
+   <div style="background-image:url('https://images.unsplash.com/photo-1606664515524-ed2f786a0bd6?w=1800&q=80')"></div>
+  </div>
+  <div class="video-chip"><span></span> Hero Video (showroom film plays here)</div>
+  <div class="content wrap">
+   <div class="eyebrow" data-i18n="hero_eye">Dhaka's Curated Car Collection</div>
+   <h1 data-i18n-html="hero_h">Where every car has <i>a story</i> worth driving.</h1>
+   <p data-i18n="hero_p">Brand-new, reconditioned, pre-owned and electric cars — inspected, documented and ready for your test drive.</p>
+   <div style="display:flex;gap:12px;flex-wrap:wrap">
+    <a class="btn" onclick="go('inventory')" data-i18n="btn_explore">Explore Inventory →</a>
+    <a class="btn ghost" onclick="go('testdrive')" data-i18n="btn_td">Book a Test Drive</a>
+   </div>
+  </div>
+  <div class="scroll-cue">SCROLL</div>
+ </div>
+
+ <!-- Discover your next car -->
+ <div class="discover wrap">
+  <div class="finder">
+   <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+    <h3 class="serif" style="font-size:24px" data-i18n="disc_h">Discover your next car</h3>
+    <div class="tabs" style="margin:0" id="homeCond">
+     <button class="chip on" data-c="">All</button><button class="chip" data-c="Brand-new">Brand-new</button><button class="chip" data-c="Reconditioned">Reconditioned</button><button class="chip" data-c="Pre-owned">Pre-owned</button><button class="chip" data-c="Electric">Electric & Hybrid</button>
+    </div>
+   </div>
+   <div class="row">
+    <div><label>Brand</label><select id="hBrand"><option value="">Any brand</option></select></div>
+    <div><label>Body type</label><select id="hBody"><option value="">Any body</option><option>SUV</option><option>Sedan</option><option>MPV</option><option>Hatchback</option></select></div>
+    <div><label>Budget (max)</label><select id="hBudget"><option value="">Any budget</option><option value="5000000">Under 50 Lakh</option><option value="10000000">Under 1 Crore</option><option value="20000000">Under 2 Crore</option><option value="999999999">2 Crore +</option></select></div>
+    <div><label>Fuel</label><select id="hFuel"><option value="">Any fuel</option><option>Petrol</option><option>Hybrid</option><option>Electric</option><option>Diesel</option></select></div>
+    <button class="btn" style="height:44px" onclick="homeSearch()">Search <span id="hCount"></span></button>
+   </div>
+  </div>
+  <div class="quick">
+   <a onclick="go('loan')"><div class="ic"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h2M14 11h2M8 15h2M14 15h2M8 19h8"/></svg></div><div><b data-i18n="q_loan">Car Loan Calculator</b><small>Plan your monthly EMI</small></div></a>
+   <a onclick="go('testdrive')"><div class="ic"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 3v7M5 16l5-3M19 16l-5-3"/></svg></div><div><b data-i18n="q_td">Book a Test Drive</b><small>Pick a date & time</small></div></a>
+   <a onclick="go('compare')"><div class="ic"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M8 3v18M16 3v18M3 8h5M16 8h5M3 16h5M16 16h5"/></svg></div><div><b data-i18n="q_cmp">Compare Cars</b><small>Mileage, price & specs</small></div></a>
+   <a onclick="go('sell')"><div class="ic"><svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div><b data-i18n="q_sell">Sell / Trade-in</b><small>Get a valuation</small></div></a>
+  </div>
+ </div>
+
+ <!-- Story / About -->
+ <section>
+  <div class="wrap story">
+   <div class="img" style="background-image:url('https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=1200&q=80')"><div class="stamp"><b>15+</b>Years of trust</div></div>
+   <div>
+    <div class="eyebrow" data-i18n="story_eye">Our Story</div>
+    <h2 class="sec" data-i18n="story_h">More than a showroom — a museum of fine automobiles.</h2>
+    <p class="muted">Auto Museum began with a simple belief: buying a car should feel as special as driving one. Every vehicle in our collection is hand-picked, inspected on a multi-point checklist and presented with full documentation — import papers, auction sheet and service history — so you buy with total confidence.</p>
+    <p class="muted" style="margin-top:12px">From the first WhatsApp message to BRTA registration, one dedicated advisor stays with you through the whole journey.</p>
+    <div class="stats"><div><b>1,200+</b><br><small class="muted">Cars delivered</small></div><div><b>20+</b><br><small class="muted">Brands</small></div><div><b>4.9★</b><br><small class="muted">Customer rating</small></div></div>
+    <a class="btn ghost" style="margin-top:28px" onclick="go('about')">Read our story →</a>
+   </div>
+  </div>
+ </section>
+
+ <!-- Brands -->
+ <div class="marquee"><div class="track" id="marq"></div></div>
+
+ <!-- Products -->
+ <section>
+  <div class="wrap">
+   <div style="display:flex;justify-content:space-between;align-items:end;gap:20px;flex-wrap:wrap;margin-bottom:30px">
+    <div><div class="eyebrow" data-i18n="prod_eye">Featured Collection</div><h2 class="sec" style="margin-bottom:0" data-i18n="prod_h">Just arrived at the showroom</h2></div>
+    <a class="btn ghost" onclick="go('inventory')">View all cars →</a>
+   </div>
+   <div class="grid cars" id="featured"></div>
+  </div>
+ </section>
+
+ <!-- Why us -->
+ <section style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+  <div class="wrap">
+   <div style="text-align:center;max-width:640px;margin:0 auto 40px"><div class="eyebrow">Why Auto Museum</div><h2 class="sec">Buy with complete confidence</h2></div>
+   <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
+    <div class="form-card" style="padding:24px"><div class="gold" style="font-size:26px">01</div><h3 style="margin:8px 0">Multi-point inspection</h3><p class="muted" style="font-size:14px">Every car checked by our technicians before listing, with downloadable inspection report.</p></div>
+    <div class="form-card" style="padding:24px"><div class="gold" style="font-size:26px">02</div><h3 style="margin:8px 0">Transparent pricing</h3><p class="muted" style="font-size:14px">Real prices and real mileage on every listing — no hidden charges.</p></div>
+    <div class="form-card" style="padding:24px"><div class="gold" style="font-size:26px">03</div><h3 style="margin:8px 0">Bank loan support</h3><p class="muted" style="font-size:14px">We prepare quotations and papers your bank needs for a car loan.</p></div>
+    <div class="form-card" style="padding:24px"><div class="gold" style="font-size:26px">04</div><h3 style="margin:8px 0">Registration handled</h3><p class="muted" style="font-size:14px">Import papers and BRTA registration support from start to finish.</p></div>
+   </div>
+  </div>
+ </section>
+
+ <!-- Testimonials -->
+ <section>
+  <div class="wrap">
+   <div class="eyebrow">Happy Owners</div><h2 class="sec">Delivered with a smile</h2>
+   <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:20px">
+    <div class="form-card"><p>"Booked a test drive on the website, got a WhatsApp call within ten minutes. The whole process was smooth."</p><p class="gold" style="margin-top:14px;font-size:14px">— Rafiq H., Toyota Land Cruiser Prado</p></div>
+    <div class="form-card"><p>"The comparison tool helped me choose between two hybrids. Mileage and price side by side — very clear."</p><p class="gold" style="margin-top:14px;font-size:14px">— Nusrat J., Lexus ES 300h</p></div>
+    <div class="form-card"><p>"Honest dealer. All papers were shown before payment and they arranged my bank loan too."</p><p class="gold" style="margin-top:14px;font-size:14px">— Tanvir A., BMW 530e</p></div>
+   </div>
+  </div>
+ </section>
+
+ <section style="padding-top:0"><div class="wrap"><div class="cta">
+  <div><div class="eyebrow">Can't find the one?</div><h2 class="serif" style="font-size:34px;margin-top:8px">We'll import it for you.</h2><p class="muted">Tell us the model, colour and trim — our team handles the rest.</p></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn wa" onclick="waMsg('Hi, I could not find the car I am looking for. Can you import it for me?')">Chat on WhatsApp</a><a class="btn ghost" onclick="go('contact')">Contact us</a></div>
+ </div></div></section>
+</div>
+
+<!-- INVENTORY -->
+<div class="page" id="p-inventory">
+ <div class="page-head"><div class="wrap">
+  <div class="crumb">Home / Inventory</div>
+  <h1 class="serif" style="font-size:clamp(30px,5vw,50px)" data-i18n="inv_h">The Auto Museum Collection</h1>
+  <p class="muted" style="max-width:640px;margin-top:8px">Browse every car in stock — brand-new, reconditioned, pre-owned and electric. Shortlist, compare, then confirm on WhatsApp.</p>
+  <div class="tabs" id="invCond" style="display:flex;gap:8px;margin-top:20px;flex-wrap:wrap">
+   <button class="chip on" data-c="">All</button><button class="chip" data-c="Brand-new">Brand-new</button><button class="chip" data-c="Reconditioned">Reconditioned</button><button class="chip" data-c="Pre-owned">Pre-owned</button><button class="chip" data-c="Electric">Electric & Hybrid</button>
+  </div>
+ </div></div>
+ <div class="wrap inv">
+  <aside class="filters">
+   <h4>Filters <a class="gold" style="font-size:12px" onclick="resetFilters()">Reset</a></h4>
+   <div class="f"><label>Search</label><input id="fq" placeholder="e.g. Land Cruiser, BMW…" oninput="renderInv()"></div>
+   <div class="f"><label>Brand</label><select id="fBrand" onchange="renderInv()"><option value="">All brands</option></select></div>
+   <div class="f"><label>Body style</label><select id="fBody" onchange="renderInv()"><option value="">All</option><option>SUV</option><option>Sedan</option><option>MPV</option><option>Hatchback</option></select></div>
+   <div class="f"><label>Fuel type</label><select id="fFuel" onchange="renderInv()"><option value="">All</option><option>Petrol</option><option>Hybrid</option><option>Electric</option><option>Diesel</option></select></div>
+   <div class="f"><label>Max price</label><input type="range" id="fPrice" min="3000000" max="60000000" step="500000" value="60000000" oninput="renderInv()"><div class="range-out" id="fPriceOut"></div></div>
+   <div class="f"><label>Min year</label><select id="fYear" onchange="renderInv()"><option value="0">Any</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option><option>2020</option><option>2018</option></select></div>
+   <div class="f"><label>Max mileage (km)</label><select id="fKm" onchange="renderInv()"><option value="9999999">Any</option><option value="0">0 km (new)</option><option value="10000">Under 10,000</option><option value="30000">Under 30,000</option><option value="60000">Under 60,000</option></select></div>
+   <div class="f"><label>Availability</label><select id="fSt" onchange="renderInv()"><option value="">All</option><option>Available</option><option>Reserved</option><option>Sold</option></select></div>
+  </aside>
+  <div>
+   <div class="inv-top"><span class="muted"><b id="invCount" style="color:var(--text)">0</b> cars found</span>
+    <select id="fSort" style="width:auto" onchange="renderInv()"><option value="new">Newest first</option><option value="lo">Price: Low → High</option><option value="hi">Price: High → Low</option><option value="km">Lowest mileage</option></select></div>
+   <div class="grid cars" id="invGrid"></div>
+  </div>
+ </div>
+</div>
+
+<!-- DETAIL -->
+<div class="page" id="p-detail"><div class="wrap" id="detailWrap"></div></div>
+
+<!-- COMPARE -->
+<div class="page" id="p-compare">
+ <div class="page-head"><div class="wrap"><div class="crumb">Home / Compare</div><h1 class="serif" style="font-size:clamp(30px,5vw,50px)" data-i18n="cmp_h">Compare two cars</h1><p class="muted">Pick any two cars to see mileage, price and specifications side by side.</p></div></div>
+ <div class="wrap" style="padding:40px 20px 80px">
+  <div class="cmp-pick">
+   <div><select id="cmpA" onchange="renderCompare()"></select><div class="cmp-card" id="cmpCardA" style="margin-top:12px"></div></div>
+   <div class="vs">VS</div>
+   <div><select id="cmpB" onchange="renderCompare()"></select><div class="cmp-card" id="cmpCardB" style="margin-top:12px"></div></div>
+  </div>
+  <div class="tbl-wrap"><table class="ct" id="cmpTable"></table></div>
+ </div>
+</div>
+
+<!-- LOAN -->
+<div class="page" id="p-loan">
+ <div class="page-head"><div class="wrap"><div class="crumb">Home / Car Loan Calculator</div><h1 class="serif" style="font-size:clamp(30px,5vw,50px)" data-i18n="loan_h">Car Loan Calculator</h1><p class="muted">Estimate your monthly EMI. Final terms depend on your bank or finance company.</p></div></div>
+ <div class="wrap" style="padding:40px 20px 80px">
+  <div class="ln-grid">
+   <!-- INPUTS -->
+   <div class="ln-card">
+    <div class="ln-step"><span>1</span> Choose a car or enter the price</div>
+    <select id="lnCar" style="margin-bottom:10px"><option value="">— Pick a car from our inventory —</option></select>
+    <div class="ln-money"><span>BDT</span><input id="lnPrice" type="text" inputmode="numeric" value="50,00,000"></div>
+    <input type="range" id="lnPriceR" min="1000000" max="60000000" step="100000" value="5000000" style="margin-top:12px">
+    <div class="ln-help" id="lnPriceWords"></div>
+
+    <div class="ln-step" style="margin-top:26px"><span>2</span> Down payment (you pay first)</div>
+    <div class="ln-chips" id="lnDownChips"><button data-v="10">10%</button><button data-v="20" class="on">20%</button><button data-v="30">30%</button><button data-v="40">40%</button><button data-v="50">50%</button></div>
+    <div class="ln-row2"><div class="ln-money sm"><input id="lnDownPct" type="number" min="0" max="90" value="20"><span>%</span></div><div class="ln-money sm"><span>BDT</span><input id="lnDownAmt" type="text" inputmode="numeric"></div></div>
+
+    <div class="ln-step" style="margin-top:26px"><span>3</span> Loan tenure</div>
+    <div class="ln-chips" id="lnYrChips"><button data-v="1">1 yr</button><button data-v="2">2 yrs</button><button data-v="3">3 yrs</button><button data-v="4">4 yrs</button><button data-v="5" class="on">5 yrs</button><button data-v="6">6 yrs</button></div>
+
+    <div class="ln-step" style="margin-top:26px"><span>4</span> Interest rate (yearly)</div>
+    <div class="ln-row2"><input type="range" id="lnRateR" min="6" max="16" step="0.25" value="10"><div class="ln-money sm"><input id="lnRate" type="number" min="1" max="30" step="0.25" value="10"><span>%</span></div></div>
+   </div>
+
+   <!-- RESULT -->
+   <div class="ln-res">
+    <small class="muted">Your monthly instalment (EMI)</small>
+    <div class="ln-big" id="lnEmi">—</div>
+    <div class="muted" style="font-size:13px" id="lnEmiSub"></div>
+
+    <div class="ln-journey">
+     <div><i>①</i><small>Pay today<br>(down payment)</small><b id="jDown"></b></div>
+     <div class="ar">→</div>
+     <div><i>②</i><small id="jMonthsL">Every month</small><b id="jEmi"></b></div>
+     <div class="ar">→</div>
+     <div><i>③</i><small>Car is fully<br>yours</small><b id="jEnd"></b></div>
+    </div>
+
+    <div class="ln-donut"><svg viewBox="0 0 42 42" width="132" height="132"><circle cx="21" cy="21" r="15.9" fill="none" stroke="#2a2a31" stroke-width="5"/><circle id="dDown" cx="21" cy="21" r="15.9" fill="none" stroke="#e6c77a" stroke-width="5" transform="rotate(-90 21 21)"/><circle id="dPrin" cx="21" cy="21" r="15.9" fill="none" stroke="#c9a24d" stroke-width="5" transform="rotate(-90 21 21)"/><circle id="dInt" cx="21" cy="21" r="15.9" fill="none" stroke="#7a5f26" stroke-width="5" transform="rotate(-90 21 21)"/></svg>
+     <div class="ln-legend">
+      <div><span style="background:#e6c77a"></span>Down payment<b id="lgDown"></b></div>
+      <div><span style="background:#c9a24d"></span>Loan amount (principal)<b id="lgLoan"></b></div>
+      <div><span style="background:#7a5f26"></span>Total interest<b id="lgInt"></b></div>
+     </div>
+    </div>
+    <div class="ln-sum">
+     <div><span>Remaining to pay after down payment</span><b id="sRemain"></b></div>
+     <div class="tot"><span>Total cost of the car (down + all EMIs)</span><b id="sTotal"></b></div>
+     <div><span>Extra paid over car price</span><b id="sExtra" style="color:#f0a050"></b></div>
+    </div>
+    <div style="display:flex;gap:10px;margin-top:18px;flex-wrap:wrap"><button class="btn wa sm" onclick="loanWA()">Apply / get loan help on WhatsApp</button><button class="btn ghost sm" onclick="window.print()">Print / Save plan</button></div>
+   </div>
+  </div>
+
+  <!-- Tenure comparison -->
+  <div class="ln-card" style="margin-top:24px">
+   <h3 class="serif" style="font-size:22px">Compare tenures <span class="muted" style="font-size:13px;font-family:var(--sans)">— same car, same down payment, same rate</span></h3>
+   <div class="ln-tenures" id="lnTenures"></div>
+  </div>
+
+  <!-- Yearly schedule -->
+  <div class="ln-card" style="margin-top:24px">
+   <h3 class="serif" style="font-size:22px;margin-bottom:6px">Year-by-year repayment plan</h3>
+   <p class="muted" style="font-size:13px;margin-bottom:14px">How much of your payments goes to the loan and how much to interest, and what is still left after each year.</p>
+   <div class="tbl-wrap"><table class="dt" id="lnSched"></table></div>
+  </div>
+
+  <p class="muted" style="font-size:12px;margin-top:14px">* Indicative calculation only (reducing-balance EMI method). Actual rate, down payment and processing fees depend on your bank and Bangladesh Bank rules; confirm with your lender.</p>
+ </div>
+</div>
+
+<!-- TEST DRIVE -->
+<div class="page" id="p-testdrive">
+ <div class="page-head"><div class="wrap"><div class="crumb">Home / Book a Test Drive</div><h1 class="serif" style="font-size:clamp(30px,5vw,50px)" data-i18n="td_h">Book a Test Drive</h1><p class="muted">Choose a car, pick a date and time — your advisor will confirm on WhatsApp.</p></div></div>
+ <div class="wrap" style="padding:40px 20px 80px">
+  <div class="grid" style="grid-template-columns:1.1fr 1fr">
+   <div class="form-card">
+    <h3 style="margin-bottom:18px">1. Your details</h3>
+    <div class="f2">
+     <div class="full"><label>Car</label><select id="tdCar"></select></div>
+     <div><label>Full name</label><input id="tdName" placeholder="Your name"></div>
+     <div><label>Phone / WhatsApp</label><input id="tdPhone" placeholder="01XXXXXXXXX"></div>
+     <div class="full"><label>Location</label><select><option>At Auto Museum showroom</option><option>Home test drive (Dhaka city)</option></select></div>
+     <div class="full"><label>Note (optional)</label><textarea rows="3" placeholder="Anything we should know?"></textarea></div>
+    </div>
+   </div>
+   <div class="form-card">
+    <h3 style="margin-bottom:14px">2. Pick date & time</h3>
+    <div style="display:flex;justify-content:space-between;margin-bottom:10px"><b>November 2026</b><span class="muted" style="font-size:12px">Fridays: afternoon only</span></div>
+    <div class="cal" id="tdCal"></div>
+    <div class="slots" id="tdSlots"></div>
+    <button class="btn" style="width:100%;justify-content:center;margin-top:20px" onclick="bookTD()">Confirm Booking</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<!-- CHECKOUT -->
+<div class="page" id="p-checkout"><div class="wrap" style="padding:40px 20px 80px" id="coWrap"></div></div>
+
+<!-- SELL -->
+<div class="page" id="p-sell">
+ <div class="page-head"><div class="wrap"><div class="crumb">Home / Sell Your Car</div><h1 class="serif" style="font-size:clamp(30px,5vw,50px)" data-i18n="sell_h">Sell or Trade-in Your Car</h1><p class="muted">Get a fair valuation within 24 hours. Upgrade to any car in our collection.</p></div></div>
+ <div class="wrap" style="padding:40px 20px 80px;max-width:820px">
+  <div class="form-card"><div class="f2">
+   <div><label>Brand</label><input placeholder="Toyota"></div><div><label>Model</label><input placeholder="Axio"></div>
+   <div><label>Year</label><input placeholder="2019"></div><div><label>Mileage (km)</label><input placeholder="45,000"></div>
+   <div><label>Your name</label><input id="slName" placeholder="Name"></div><div><label>Phone</label><input id="slPhone" placeholder="01XXXXXXXXX"></div>
+   <div class="full"><label>Upload photos</label><input type="file" multiple></div>
+   <div class="full"><label><input type="checkbox" style="width:auto"> I want to trade-in for a car from Auto Museum</label></div>
+  </div><button class="btn" style="margin-top:20px" onclick="addLead(val('slName')||'Seller (demo)',val('slPhone')||'01700000000','Website','Sell Your Car');toast('✓ Valuation request sent. Our team will call you within 24 hours.')">Get Valuation</button></div>
+ </div>
+</div>
+
+<!-- ABOUT -->
+<div class="page" id="p-about">
+ <div class="page-head"><div class="wrap"><div class="crumb">Home / About</div><h1 class="serif" style="font-size:clamp(30px,5vw,50px)" data-i18n="about_h">The Auto Museum Story</h1></div></div>
+ <section><div class="wrap story">
+  <div><div class="eyebrow">Since 2010</div><h2 class="sec">A collection built on trust</h2><p class="muted">[Client's story goes here] — founding year, the founder's vision, how the showroom grew, milestones and the team behind it. This section can include a timeline, a founder's message and photos of the showroom.</p>
+   <div class="stats"><div><b>2010</b><br><small class="muted">Founded</small></div><div><b>1,200+</b><br><small class="muted">Happy owners</small></div><div><b>25</b><br><small class="muted">Team members</small></div></div></div>
+  <div class="img" style="background-image:url('https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=1200&q=80')"></div>
+ </div></section>
+</div>
+
+<!-- CONTACT -->
+<div class="page" id="p-contact">
+ <div class="page-head"><div class="wrap"><div class="crumb">Home / Contact</div><h1 class="serif" style="font-size:clamp(30px,5vw,50px)" data-i18n="contact_h">Visit · Call · Chat</h1></div></div>
+ <div class="wrap" style="padding:40px 20px 80px"><div class="grid" style="grid-template-columns:1fr 1fr">
+  <div class="form-card"><h3 style="margin-bottom:16px">Send us a message</h3><div class="f2">
+   <div><label>Name</label><input id="ctName"></div><div><label>Phone</label><input id="ctPhone"></div>
+   <div class="full"><label>Message</label><textarea rows="5"></textarea></div></div>
+   <button class="btn" style="margin-top:18px" onclick="addLead(val('ctName')||'Visitor (demo)',val('ctPhone')||'01800000000','Website','General inquiry');toast('✓ Message sent — it is now in the CRM.')">Send Message</button></div>
+  <div class="form-card"><h3>Showroom</h3><p class="muted" style="margin:10px 0">[Showroom address], Dhaka, Bangladesh</p>
+   <p><b>Sat – Thu:</b> 10:00 – 20:00<br><b>Friday:</b> 15:00 – 20:00</p>
+   <div style="display:flex;gap:10px;margin:18px 0;flex-wrap:wrap"><a class="btn wa sm" onclick="waMsg('Hi Auto Museum!')">WhatsApp</a><a class="btn ghost sm">Call +880 1XXX-XXXXXX</a></div>
+   <div style="aspect-ratio:16/9;border-radius:12px;background:#15151a repeating-linear-gradient(45deg,#18181d 0 10px,#15151a 10px 20px);display:grid;place-items:center;color:var(--muted);border:1px solid var(--line)">📍 Google Map embed</div></div>
+ </div></div>
+</div>
+
+<footer class="site">
+ <div class="wrap">
+  <div class="cols">
+   <div><a class="logo"><div class="logo-mark">AM</div><div><b>AUTO MUSEUM</b><small>Curated Automobiles</small></div></a><p class="muted" style="margin-top:16px;font-size:14px;max-width:300px">Brand-new, reconditioned, pre-owned and electric cars in Dhaka — inspected, documented, delivered.</p></div>
+   <div><h5>Explore</h5><ul><li><a onclick="go('inventory')">Inventory</a></li><li><a onclick="go('compare')">Compare Cars</a></li><li><a onclick="go('loan')">Car Loan Calculator</a></li><li><a onclick="go('testdrive')">Book a Test Drive</a></li><li><a onclick="go('sell')">Sell Your Car</a></li></ul></div>
+   <div><h5>Company</h5><ul><li><a onclick="go('about')">About Us</a></li><li><a>Journal</a></li><li><a>Gallery</a></li><li><a onclick="go('contact')">Contact</a></li><li><a onclick="openCRM()">Staff Login (CRM)</a></li></ul></div>
+   <div><h5>Opening hours</h5><ul><li>Sat – Thu: 10:00 – 20:00</li><li>Friday: 15:00 – 20:00</li><li style="margin-top:12px">Facebook · Instagram · YouTube</li></ul></div>
+  </div>
+  <div class="copy"><span>© 2026 Auto Museum Ltd. All rights reserved.</span><span>Design & Development by Endeavours Corporation Ltd.</span></div>
+ </div>
+</footer>
+<a class="fab-wa" onclick="waMsg('Hi Auto Museum!')" title="WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.3 14.1c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.9s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.9 2.1c.1.2.1.3 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.7 1.2 1.6 1.9 1.1 1 2 1.3 2.3 1.4.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l2 1c.3.1.5.2.5.3.1.2.1.7-.1 1.2z"/></svg></a>
+<div class="tray" id="tray"><div class="wrap"><b style="font-size:14px">Compare:</b><div id="traySlots" style="display:flex;gap:10px;flex-wrap:wrap"></div><button class="btn sm" style="margin-left:auto" onclick="goCompare()">Compare now →</button><button class="btn ghost sm" onclick="cmpSel=[];syncTray();renderAllCards()">Clear</button></div></div>
+</div>
+
+<!-- ============ CRM ============ -->
+<div id="crm">
+ <aside class="crm-side">
+  <a class="logo brand" style="margin-bottom:24px;padding:0 6px"><div class="logo-mark" style="width:34px;height:34px;font-size:14px">AM</div><div><b style="font-size:15px">AUTO MUSEUM</b><small>CRM</small></div></a>
+  <a class="on" data-v="dash" onclick="crmView('dash')">📊 Dashboard</a>
+  <a data-v="leads" onclick="crmView('leads')">💬 Leads <span class="cnt" id="newCnt">0</span></a>
+  <a data-v="pipe" onclick="crmView('pipe')">🗂 Pipeline</a>
+  <a data-v="cal" onclick="crmView('cal')">📅 Test Drive Calendar</a>
+  <a data-v="team" onclick="crmView('team')">👤 Sales Team</a>
+  <a data-v="stock" onclick="crmView('stock')">🚗 Cars & Prices</a>
+  <a data-v="ann" onclick="crmView('ann')">📣 Announcements</a>
+  <div class="bottom" style="margin-top:auto"><a onclick="closeCRM()">← Back to Website</a><div style="display:flex;gap:10px;align-items:center;padding:12px 6px;border-top:1px solid var(--line);margin-top:10px"><span class="av" style="background:var(--gold)">AD</span><div style="font-size:13px">Admin<br><small class="muted">Sales Manager</small></div></div></div>
+ </aside>
+ <main class="crm-main">
+  <!-- Dashboard -->
+  <div class="crm-view show" id="v-dash">
+   <div class="crm-top"><div><h2>Good morning, Admin 👋</h2><span class="muted" style="font-size:13px">Saturday, 7 November 2026</span></div><button class="btn sm" onclick="simulateWA()">+ Simulate new WhatsApp lead</button></div>
+   <div class="kpis" id="kpis"></div>
+   <div class="panel"><h3>Lead flow — automatic assignment</h3>
+    <div class="flow">
+     <div class="node wa"><div style="font-size:24px">💬</div><b>Lead arrives</b><small>WhatsApp · Website · Test drive · Facebook</small></div><div class="arr">→</div>
+     <div class="node cr"><div style="font-size:24px">🗄</div><b>CRM logs it</b><small>Customer, car, source & time saved</small></div><div class="arr">→</div>
+     <div class="node sp"><div style="font-size:24px">👤</div><b>Assigned to salesperson</b><small>Round-robin, each one handles individually</small></div><div class="arr">→</div>
+     <div class="node"><div style="font-size:24px">🔔</div><b>Follow-up & history</b><small>Reminders, notes, test drive, close</small></div>
+    </div>
+   </div>
+   <div class="two">
+    <div class="panel"><h3>Latest leads <a class="gold" style="font-size:13px" onclick="crmView('leads')">View all →</a></h3><div class="tbl-wrap"><table class="dt" id="dashLeads"></table></div></div>
+    <div class="panel"><h3>Today's test drives</h3><div id="todayTD"></div></div>
+   </div>
+  </div>
+
+  <!-- Leads -->
+  <div class="crm-view" id="v-leads">
+   <div class="crm-top"><h2>Leads & Inquiries</h2><div style="display:flex;gap:8px;flex-wrap:wrap"><select id="lfSrc" style="width:auto" onchange="renderLeads()"><option value="">All sources</option><option>WhatsApp</option><option>Website</option><option value="TestDrive">Test Drive</option><option>Facebook</option></select><select id="lfSp" style="width:auto" onchange="renderLeads()"><option value="">All salespeople</option></select><button class="btn sm" onclick="simulateWA()">+ New WhatsApp lead</button></div></div>
+   <div class="panel"><div class="tbl-wrap"><table class="dt" id="leadTable"></table></div></div>
+  </div>
+
+  <!-- Pipeline -->
+  <div class="crm-view" id="v-pipe"><div class="crm-top"><h2>Sales Pipeline</h2><span class="muted" style="font-size:13px">Click a card to see full history</span></div><div class="kanban" id="kanban"></div></div>
+
+  <!-- Calendar -->
+  <div class="crm-view" id="v-cal">
+   <div class="crm-top"><h2>Test Drive Calendar — November 2026</h2><button class="btn sm" onclick="closeCRM();go('testdrive')">+ New booking</button></div>
+   <div class="panel"><div class="crm-cal" id="crmCal"></div></div>
+   <div class="panel"><h3 id="calDayTitle">Select a day to see bookings</h3><div id="calDayList"></div></div>
+  </div>
+
+  <!-- Team -->
+  <div class="crm-view" id="v-team"><div class="crm-top"><h2>Sales Team Performance</h2></div><div class="sp-cards" id="spCards"></div></div>
+
+  <!-- Stock -->
+  <div class="crm-view" id="v-stock">
+   <div class="crm-top"><h2>Cars & Price Updates</h2><div style="display:flex;gap:8px"><button class="btn ghost sm" onclick="toast('Demo: bulk upload via CSV / Excel')">⬆ Bulk upload CSV</button><button class="btn sm" onclick="toast('Demo: Add new car form opens here')">+ Add car</button></div></div>
+   <div class="panel"><div class="tbl-wrap"><table class="dt" id="stockTable"></table></div><p class="muted" style="font-size:12px;margin-top:10px">Change price or status — it updates the live website instantly (try it, then open the website).</p></div>
+  </div>
+
+  <!-- Announcements -->
+  <div class="crm-view" id="v-ann">
+   <div class="crm-top"><h2>Announcements</h2></div>
+   <div class="two">
+    <div class="panel"><h3>Create announcement</h3><div class="f2"><div class="full"><label>Title</label><input value="New arrivals: 2025 Land Cruiser 250"></div><div class="full"><label>Message</label><textarea rows="4">Just landed at Auto Museum! Book your test drive today.</textarea></div><div><label>Channel</label><select><option>Website banner + SMS</option><option>Email</option><option>SMS only</option></select></div><div><label>Schedule</label><input type="datetime-local" value="2026-11-08T10:00"></div></div><button class="btn sm" style="margin-top:16px" onclick="toast('✓ Announcement scheduled for 8 Nov, 10:00')">Schedule</button></div>
+    <div class="panel"><h3>Recent</h3><div class="tl"><div><b>Eid Offer — free registration</b><small>Sent to 1,240 customers · SMS</small></div><div><b>BYD Seal arrived</b><small>Website banner · 3 Nov</small></div><div><b>Showroom closed — 16 Dec</b><small>Website notice · Scheduled</small></div></div></div>
+   </div>
+  </div>
+ </main>
+</div>
+<div class="drawer" id="drawer"></div>
+
+<div class="modal" id="modal"><div class="box"><button class="x" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===================== DATA ===================== */
+const U=id=>`https://images.unsplash.com/photo-${id}?w=900&q=75`;
+const cars=[
+ {id:1,brand:'Toyota',model:'Land Cruiser 250',year:2024,cond:'Reconditioned',fuel:'Petrol',body:'SUV',cc:2700,km:5000,price:25900000,color:'Black',trans:'Automatic',seats:7,kmpl:8.5,status:'Available',img:U('1549317661-bd32c8ce0db2'),grade:'4.5'},
+ {id:2,brand:'Mercedes-Benz',model:'S 500',year:2021,cond:'Pre-owned',fuel:'Petrol',body:'Sedan',cc:3000,km:17000,price:29900000,color:'Grey',trans:'Automatic',seats:5,kmpl:9,status:'Available',img:U('1606664515524-ed2f786a0bd6')},
+ {id:3,brand:'BMW',model:'i7 xDrive60',year:2025,cond:'Brand-new',fuel:'Electric',body:'Sedan',cc:0,km:0,price:null,color:'Two-tone',trans:'Automatic',seats:5,kmpl:0,range:600,status:'Available',img:U('1555215695-3004980ad54e')},
+ {id:4,brand:'Lexus',model:'ES 300h',year:2021,cond:'Reconditioned',fuel:'Hybrid',body:'Sedan',cc:2500,km:26000,price:9690000,color:'Blue',trans:'Automatic',seats:5,kmpl:18,status:'Available',img:U('1580273916550-e323be2ae537'),grade:'4.5'},
+ {id:5,brand:'Toyota',model:'Alphard',year:2024,cond:'Reconditioned',fuel:'Hybrid',body:'MPV',cc:2500,km:8000,price:16900000,color:'Bronze',trans:'Automatic',seats:7,kmpl:14,status:'Reserved',img:U('1502877338535-766e1452684a'),grade:'5'},
+ {id:6,brand:'Honda',model:'Civic FL1',year:2021,cond:'Reconditioned',fuel:'Petrol',body:'Sedan',cc:1500,km:31000,price:5590000,color:'Sonic Grey',trans:'CVT',seats:5,kmpl:15,status:'Available',img:U('1552519507-da3b142c6e3d'),grade:'4'},
+ {id:7,brand:'BYD',model:'Seal 5 DM-i',year:2026,cond:'Brand-new',fuel:'Hybrid',body:'Sedan',cc:1500,km:0,price:3690000,color:'Cosmos Black',trans:'Automatic',seats:5,kmpl:25,status:'Available',img:U('1617788138017-80ad40651399')},
+ {id:8,brand:'Honda',model:'CR-V',year:2022,cond:'Pre-owned',fuel:'Petrol',body:'SUV',cc:1500,km:29000,price:4999000,color:'Red',trans:'CVT',seats:5,kmpl:13,status:'Available',img:U('1533473359331-0135ef1b58bf')},
+ {id:9,brand:'Porsche',model:'911 Carrera',year:2022,cond:'Pre-owned',fuel:'Petrol',body:'Hatchback',cc:3000,km:9000,price:38500000,color:'Silver',trans:'PDK',seats:4,kmpl:9.5,status:'Available',img:U('1503376780353-7e6692767b70')},
+ {id:10,brand:'Lexus',model:'LX 600',year:2023,cond:'Brand-new',fuel:'Petrol',body:'SUV',cc:3500,km:0,price:59900000,color:'White',trans:'Automatic',seats:7,kmpl:7.5,status:'Available',img:U('1511919884226-fd3cad34687c')},
+ {id:11,brand:'Mercedes-Benz',model:'CLA 200',year:2022,cond:'Pre-owned',fuel:'Petrol',body:'Sedan',cc:1300,km:12000,price:8490000,color:'Blue',trans:'Automatic',seats:5,kmpl:14,status:'Sold',img:U('1618843479313-40f8afb4b4d8')},
+ {id:12,brand:'Ford',model:'Mustang GT',year:2020,cond:'Reconditioned',fuel:'Petrol',body:'Hatchback',cc:5000,km:22000,price:14500000,color:'Yellow',trans:'Automatic',seats:4,kmpl:7,status:'Available',img:U('1494976388531-d1058494cdd8'),grade:'4'}
+];
+const brands=['Mercedes-Benz','BMW','Lexus','Toyota','Porsche','Audi','Land Rover','Honda','BYD','Nissan','Hyundai','Volvo'];
+const sales=[{n:'Rahim Uddin',c:'#c9a24d'},{n:'Sadia Akter',c:'#3ecf8e'},{n:'Imran Hossain',c:'#4f8cff'},{n:'Nabila Rahman',c:'#e07ab0'}];
+let rr=0;
+let leads=[
+ {id:1,name:'Arif Chowdhury',phone:'01711-234567',src:'WhatsApp',car:'Toyota Land Cruiser 250',status:'New',sp:0,time:'10 min ago',hist:[['WhatsApp message: "Is the Land Cruiser still available?"','Today 11:42'],['Auto-assigned to Rahim Uddin','Today 11:42']]},
+ {id:2,name:'Farzana Islam',phone:'01819-556677',src:'TestDrive',car:'Lexus ES 300h',status:'Contacted',sp:1,time:'1 hr ago',hist:[['Test drive booked for 9 Nov, 4:00 PM','Today 10:50'],['Called — confirmed booking','Today 11:05']]},
+ {id:3,name:'Kamrul Hasan',phone:'01912-889900',src:'Website',car:'BMW i7 xDrive60',status:'Follow-up',sp:2,time:'Yesterday',hist:[['Website form: asked for price','6 Nov 18:20'],['Sent price quote on WhatsApp','6 Nov 19:00'],['Reminder: follow up on 8 Nov','Scheduled']]},
+ {id:4,name:'Tasnim Ahmed',phone:'01611-112233',src:'Facebook',car:'Toyota Alphard',status:'Contacted',sp:3,time:'Yesterday',hist:[['Facebook ad lead','6 Nov 14:10'],['Called — interested in loan','6 Nov 15:30']]},
+ {id:5,name:'Mahbub Alam',phone:'01755-667788',src:'WhatsApp',car:'Honda CR-V',status:'Closed',sp:0,time:'3 days ago',hist:[['WhatsApp inquiry','4 Nov'],['Test drive done','5 Nov'],['Deal closed — BDT 49.5 Lakh','6 Nov']]},
+ {id:6,name:'Shirin Sultana',phone:'01833-445566',src:'WhatsApp',car:'BYD Seal 5 DM-i',status:'New',sp:1,time:'25 min ago',hist:[['WhatsApp message: "Price of BYD Seal?"','Today 11:25'],['Auto-assigned to Sadia Akter','Today 11:25']]},
+ {id:7,name:'Nayeem Khan',phone:'01977-998877',src:'TestDrive',car:'Porsche 911 Carrera',status:'Follow-up',sp:2,time:'2 days ago',hist:[['Test drive booked','5 Nov'],['Test drive completed','6 Nov'],['Negotiating price','7 Nov']]}
+];
+let tdBookings={7:[['11:00','Arif C.','Land Cruiser 250',0],['16:00','Farzana I.','Lexus ES 300h',1]],9:[['16:00','Farzana I.','Lexus ES 300h',1]],10:[['12:00','Rana M.','BMW i7',2],['17:00','Sakib R.','Alphard',3]],12:[['15:00','Nayeem K.','Porsche 911',2]],14:[['11:00','Jubayer A.','CR-V',0],['13:00','Mitu D.','BYD Seal',1],['18:00','Hasib T.','S 500',3]],18:[['16:00','Rumana P.','LX 600',0]],21:[['12:00','Omar F.','Civic',1]],24:[['15:00','Tania S.','ES 300h',2]]};
+let wishlist=[], cmpSel=[];
+
+/* ===================== HELPERS ===================== */
+const $=id=>document.getElementById(id);
+const val=id=>$(id).value.trim();
+const fmt=n=>n==null?'Contact for price':'BDT '+n.toLocaleString('en-IN');
+const lakh=n=>n>=10000000?(n/10000000).toFixed(2)+' Cr':(n/100000).toFixed(1)+' Lakh';
+const carName=c=>c.brand+' '+c.model;
+const fallback=`this.onerror=null;this.src='data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200"><rect width="320" height="200" fill="#1d1d23"/><path d="M60 130 L85 95 Q95 82 115 80 L200 78 Q222 78 238 92 L262 112 Q275 116 275 130 L275 140 L60 140Z" fill="#2c2c34" stroke="#c9a24d" stroke-width="2"/><circle cx="105" cy="140" r="16" fill="#111" stroke="#c9a24d" stroke-width="2"/><circle cx="232" cy="140" r="16" fill="#111" stroke="#c9a24d" stroke-width="2"/><text x="160" y="185" fill="#777" font-family="sans-serif" font-size="12" text-anchor="middle">Car photo</text></svg>')}'`;
+function toast(m){const t=$('toast');t.innerHTML=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3200)}
+function modal(h){$('modalBody').innerHTML=h;$('modal').classList.add('show')}
+function closeModal(){$('modal').classList.remove('show')}
+function waMsg(m){modal(`<div style="text-align:center"><div style="font-size:42px">💬</div><h3 style="margin:10px 0">Opening WhatsApp…</h3><p class="muted" style="font-size:14px">On the live site this opens WhatsApp with a pre-filled message:</p><div style="background:#0f2a1b;border:1px solid #1f6b3e;border-radius:12px;padding:14px;margin:16px 0;text-align:left;font-size:14px">${m}</div><p class="muted" style="font-size:13px">The inquiry is also logged automatically in the CRM and assigned to a salesperson.</p><button class="btn wa" style="margin-top:16px" onclick="closeModal()">OK</button></div>`)}
+
+/* ===================== ROUTING ===================== */
+function go(p,arg){
+ document.querySelectorAll('.page').forEach(x=>x.classList.remove('show'));
+ $('p-'+p).classList.add('show');
+ document.querySelectorAll('nav.main a').forEach(a=>a.classList.toggle('active',a.dataset.p===p));
+ $('nav').classList.remove('open');
+ if(p==='detail')renderDetail(arg);
+ if(p==='checkout')renderCheckout(arg,1);
+ if(p==='inventory')renderInv();
+ if(p==='compare')renderCompare();
+ if(p==='testdrive'&&arg){$('tdCar').value=arg}
+ window.scrollTo({top:0,behavior:'instant'});
+}
+
+/* ===================== CARDS ===================== */
+function card(c){
+ return `<div class="car">
+ <div class="ph" onclick="go('detail',${c.id})"><img src="${c.img}" alt="${carName(c)}" loading="lazy" onerror="${fallback}"><span class="tag">${c.cond}</span><span class="st ${c.status}">${c.status}</span></div>
+ <div class="body"><h3 onclick="go('detail',${c.id})">${carName(c)}</h3>
+ <div class="meta">${c.year} · ${c.cc?c.cc+'cc':'EV'} · ${c.km?c.km.toLocaleString('en-IN')+' km':'0 km'} · ${c.fuel}</div>
+ <div class="foot"><span class="price">${fmt(c.price)}</span>
+ <div class="acts"><button class="mini ${wishlist.includes(c.id)?'on':''}" title="Wishlist" onclick="toggleWL(${c.id})">♥</button><button class="mini wa" title="WhatsApp" onclick="interested(${c.id})">✆</button></div></div>
+ <label class="cmp-check"><input type="checkbox" ${cmpSel.includes(c.id)?'checked':''} onchange="toggleCmp(${c.id},this)"> Add to compare</label>
+ </div></div>`;
+}
+function renderAllCards(){renderFeatured();renderInv()}
+function renderFeatured(){$('featured').innerHTML=cars.filter(c=>c.status!=='Sold').slice(0,6).map(card).join('')}
+function toggleWL(id){wishlist.includes(id)?wishlist=wishlist.filter(x=>x!==id):wishlist.push(id);$('wlCount').textContent=wishlist.length;renderAllCards();toast(wishlist.includes(id)?'♥ Added to wishlist':'Removed from wishlist')}
+function showWishlist(){const w=cars.filter(c=>wishlist.includes(c.id));modal(`<h3 style="margin-bottom:14px">Your Wishlist (${w.length})</h3>${w.length?w.map(c=>`<div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)"><img src="${c.img}" onerror="${fallback}" style="width:70px;height:46px;object-fit:cover;border-radius:6px"><div style="flex:1"><b style="font-size:14px">${carName(c)}</b><br><small class="gold">${fmt(c.price)}</small></div><a class="gold" onclick="closeModal();go('detail',${c.id})">View</a></div>`).join('')+`<button class="btn wa sm" style="margin-top:16px" onclick="waMsg('Hi, please check my shortlist: ${w.map(carName).join(', ')}')">Share list on WhatsApp</button>`:'<p class="muted">No cars saved yet. Tap ♥ on any car.</p>'}`)}
+function toggleCmp(id,el){
+ if(el.checked){if(cmpSel.length>=2){cmpSel.shift()}cmpSel.push(id)}else cmpSel=cmpSel.filter(x=>x!==id);
+ syncTray();renderAllCards();
+}
+function syncTray(){$('tray').classList.toggle('show',cmpSel.length>0);$('traySlots').innerHTML=cmpSel.map(id=>{const c=cars.find(x=>x.id===id);return`<div class="slot"><img src="${c.img}" onerror="${fallback}">${carName(c)}</div>`}).join('')+(cmpSel.length<2?'<div class="slot muted">+ select one more</div>':'')}
+function goCompare(){if(cmpSel[0])$('cmpA').value=cmpSel[0];if(cmpSel[1])$('cmpB').value=cmpSel[1];$('tray').classList.remove('show');go('compare')}
+function interested(id){const c=cars.find(x=>x.id===id);addLead('Website visitor','01XXXXXXXXX','WhatsApp',carName(c),true);waMsg(`Hi, I'm interested in the ${c.year} ${carName(c)} (${c.cond}).<br><span style="color:#7fd1a0">automuseum.com.bd/cars/${c.brand.toLowerCase().replace(/ /g,'-')}-${c.model.toLowerCase().replace(/ /g,'-')}-${c.year}</span>`)}
+
+/* ===================== HOME SEARCH ===================== */
+let homeCond='';
+function homeSearch(){
+ $('fBrand').value=$('hBrand').value;$('fBody').value=$('hBody').value;$('fFuel').value=$('hFuel').value;
+ const b=$('hBudget').value;$('fPrice').value=b&&b<60000000?b:60000000;
+ setChip('invCond',homeCond);invCond=homeCond;go('inventory');
+}
+function setChip(gid,c){document.querySelectorAll('#'+gid+' .chip').forEach(x=>x.classList.toggle('on',x.dataset.c===c))}
+
+/* ===================== INVENTORY ===================== */
+let invCond='';
+function filtered(){
+ const q=val('fq').toLowerCase(),b=$('fBrand').value,bo=$('fBody').value,f=$('fFuel').value,mp=+$('fPrice').value,y=+$('fYear').value,km=+$('fKm').value,st=$('fSt').value;
+ let r=cars.filter(c=>{
+  if(invCond==='Electric'){if(!['Electric','Hybrid'].includes(c.fuel))return false}else if(invCond&&c.cond!==invCond)return false;
+  if(q&&!(carName(c)+' '+c.color).toLowerCase().includes(q))return false;
+  if(b&&c.brand!==b)return false;if(bo&&c.body!==bo)return false;if(f&&c.fuel!==f)return false;
+  if(mp<60000000&&c.price!=null&&c.price>mp)return false;if(c.year<y)return false;if(c.km>km)return false;if(st&&c.status!==st)return false;return true});
+ const s=$('fSort').value,P=c=>c.price??9e9;
+ r.sort((a,b)=>s==='lo'?P(a)-P(b):s==='hi'?P(b)-P(a):s==='km'?a.km-b.km:b.year-a.year);
+ return r;
+}
+function renderInv(){
+ const mp=+$('fPrice').value;$('fPriceOut').textContent=mp>=60000000?'Any price':'Up to BDT '+lakh(mp);
+ const r=filtered();$('invCount').textContent=r.length;
+ $('invGrid').innerHTML=r.length?r.map(card).join(''):'<div class="form-card" style="grid-column:1/-1;text-align:center"><h3>No cars match these filters</h3><p class="muted">Try widening your search — or ask us to import it.</p></div>';
+}
+function resetFilters(){['fq','fBrand','fBody','fFuel','fSt'].forEach(i=>$(i).value='');$('fPrice').value=60000000;$('fYear').value=0;$('fKm').value=9999999;invCond='';setChip('invCond','');renderInv()}
+
+/* ===================== DETAIL ===================== */
+function renderDetail(id){
+ const c=cars.find(x=>x.id===id);
+ const gal=[c.img,U('1542362567-b07e54358753'),U('1525609004556-c46c7d6cf023'),U('1583121274602-3e2820c69888'),U('1492144534655-ae79c964c9d7')];
+ $('detailWrap').innerHTML=`
+ <div class="crumb" style="padding-top:26px"><a onclick="go('home')">Home</a> / <a onclick="go('inventory')">Inventory</a> / ${carName(c)}</div>
+ <div class="detail">
+  <div>
+   <div class="gallery"><div class="main"><img id="mainImg" src="${c.img}" onerror="${fallback}"><div class="v360"><button onclick="toast('360° exterior viewer loads here')">⟳ 360° View</button><button onclick="toast('Interior walkaround video plays here')">▶ Interior Walkaround</button></div></div>
+   <div class="thumbs">${gal.map((g,i)=>`<div class="${i?'':'on'}" onclick="document.getElementById('mainImg').src='${g}';this.parentNode.querySelectorAll('div').forEach(d=>d.classList.remove('on'));this.classList.add('on')"><img src="${g}" onerror="${fallback}"></div>`).join('')}</div></div>
+   <div class="specs">
+    <div><small>Year</small><b>${c.year}</b></div><div><small>Mileage</small><b>${c.km.toLocaleString('en-IN')} km</b></div><div><small>Engine</small><b>${c.cc?c.cc+' cc':'Electric motor'}</b></div>
+    <div><small>Fuel</small><b>${c.fuel}</b></div><div><small>Transmission</small><b>${c.trans}</b></div><div><small>Colour</small><b>${c.color}</b></div>
+    <div><small>Body</small><b>${c.body}</b></div><div><small>Seats</small><b>${c.seats}</b></div><div><small>${c.fuel==='Electric'?'Range':'Fuel economy'}</small><b>${c.fuel==='Electric'?c.range+' km':c.kmpl+' km/l'}</b></div>
+   </div>
+   <div class="tabs2" id="dTabs"><button class="on" data-t="ov">Overview</button><button data-t="ft">Features</button><button data-t="ins">Inspection Report</button><button data-t="emi">EMI Calculator</button></div>
+   <div id="dTabBody"></div>
+  </div>
+  <div><div class="side-card">
+   <span class="tag">${c.cond}</span> <span class="st ${c.status}" style="font-size:11px;padding:4px 10px;border-radius:999px;margin-left:6px">${c.status}</span>
+   <h1 class="serif" style="font-size:32px;margin:12px 0 4px">${carName(c)}</h1><p class="muted">${c.year} · ${c.color}${c.grade?' · Auction grade '+c.grade:''}</p>
+   <div style="font-size:28px;font-weight:700;color:var(--gold2);margin:18px 0 4px">${fmt(c.price)}</div>
+   ${c.price?`<p class="muted" style="font-size:13px">EMI from <b class="gold">BDT ${Math.round(emiCalc(c.price*0.8,10,5)).toLocaleString('en-IN')}/month</b> (20% down, 5 yrs, 10%) · <a class="gold" style="text-decoration:underline" onclick="loanFor(${c.id})">See full loan plan</a></p>`:''}
+   <div style="display:grid;gap:10px;margin-top:22px">
+    <button class="btn wa" style="justify-content:center" onclick="interested(${c.id})">💬 I'm interested — WhatsApp</button>
+    <button class="btn" style="justify-content:center" onclick="go('testdrive',${c.id})">Book a Test Drive</button>
+    <button class="btn ghost" style="justify-content:center" ${c.status!=='Available'?'disabled style="opacity:.4;justify-content:center"':''} onclick="go('checkout',${c.id})">🔒 Reserve Online</button>
+    <div style="display:flex;gap:10px"><button class="btn ghost sm" style="flex:1;justify-content:center" onclick="cmpSel=[${c.id}];syncTray();go('inventory');toast('Select one more car to compare')">⇄ Compare</button><button class="btn ghost sm" style="flex:1;justify-content:center" onclick="toggleWL(${c.id})">♥ Save</button></div>
+   </div>
+   <div style="border-top:1px solid var(--line);margin-top:20px;padding-top:16px;font-size:13px" class="muted">✓ Inspection report available<br>✓ Import papers on hand<br>✓ Bank loan & BRTA registration support</div>
+  </div></div>
+ </div>
+ <h2 class="serif" style="font-size:28px;margin-bottom:20px">You may also like</h2>
+ <div class="grid cars" style="margin-bottom:80px">${cars.filter(x=>x.id!==c.id&&(x.body===c.body||x.brand===c.brand)).slice(0,3).map(card).join('')}</div>`;
+ const tabs={
+  ov:`<p class="muted">This ${c.year} ${carName(c)} is presented in ${c.color} with ${c.km?c.km.toLocaleString('en-IN')+' km on the odometer':'zero kilometres'}. [Detailed description written by the sales team goes here — highlights, ownership, service history and why this car is special.]</p>`,
+  ft:`<div class="feat"><div>Panoramic sunroof</div><div>360° camera</div><div>Adaptive cruise control</div><div>Leather ventilated seats</div><div>Apple CarPlay / Android Auto</div><div>Premium sound system</div><div>Lane keep assist</div><div>Keyless entry & start</div></div>`,
+  ins:`<div class="form-card" style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap"><div><b>Multi-point Inspection Report</b><p class="muted" style="font-size:13px">Engine, gearbox, body, electrics, tyres — 150 points checked.</p></div><button class="btn sm" onclick="toast('⬇ Inspection report PDF downloads here')">⬇ Download PDF</button></div>`,
+  emi:`<div class="emi" id="dEmi" style="padding:20px"></div>`
+ };
+ const show=t=>{$('dTabBody').innerHTML=tabs[t];if(t==='emi')buildEMI('dEmi',c.price||10000000)};
+ document.querySelectorAll('#dTabs button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#dTabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');show(b.dataset.t)});
+ show('ov');
+}
+
+/* ===================== EMI ===================== */
+function emiCalc(P,rate,yrs){const r=rate/12/100,n=yrs*12;return r?P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1):P/n}
+/* ---------- Loan page ---------- */
+const LN={price:5000000,down:20,yrs:5,rate:10};
+const tk=n=>'BDT '+Math.round(n).toLocaleString('en-IN');
+const num=s=>+String(s).replace(/[^\d.]/g,'')||0;
+function inWords(n){return n>=10000000?(n/10000000).toFixed(2).replace(/\.?0+$/,'')+' crore taka':(n/100000).toFixed(2).replace(/\.?0+$/,'')+' lakh taka'}
+function loanCalc(){
+ const P=LN.price,D=P*LN.down/100,L=P-D,n=LN.yrs*12,E=emiCalc(L,LN.rate,LN.yrs),T=E*n,I=T-L;
+ $('lnPrice').value=P.toLocaleString('en-IN');$('lnPriceR').value=Math.min(P,60000000);$('lnPriceWords').textContent='= '+inWords(P);
+ if(document.activeElement.id!=='lnDownPct')$('lnDownPct').value=LN.down;
+ if(document.activeElement.id!=='lnDownAmt')$('lnDownAmt').value=Math.round(D).toLocaleString('en-IN');
+ if(document.activeElement.id!=='lnRate')$('lnRate').value=LN.rate;$('lnRateR').value=LN.rate;
+ document.querySelectorAll('#lnDownChips button').forEach(b=>b.classList.toggle('on',+b.dataset.v===LN.down));
+ document.querySelectorAll('#lnYrChips button').forEach(b=>b.classList.toggle('on',+b.dataset.v===LN.yrs));
+ $('lnEmi').innerHTML=tk(E)+'<small> / month</small>';
+ $('lnEmiSub').textContent=`for ${n} months (${LN.yrs} year${LN.yrs>1?'s':''}) at ${LN.rate}% yearly interest`;
+ $('jDown').textContent=tk(D);$('jMonthsL').innerHTML=`Every month<br>for ${n} months`;$('jEmi').textContent=tk(E);
+ const end=new Date(2026,10+n,1);$('jEnd').textContent=end.toLocaleString('en-US',{month:'short',year:'numeric'});
+ const C=2*Math.PI*15.9,tot=D+T,seg=[[ 'dDown',D],['dPrin',L],['dInt',I]];let off=0;
+ seg.forEach(([id,v])=>{const len=v/tot*C;$(id).setAttribute('stroke-dasharray',`${len} ${C-len}`);$(id).setAttribute('stroke-dashoffset',-off);off+=len});
+ $('lgDown').textContent=tk(D);$('lgLoan').textContent=tk(L);$('lgInt').textContent=tk(I);
+ $('sRemain').textContent=tk(T);$('sTotal').textContent=tk(D+T);$('sExtra').textContent='+ '+tk(I);
+ // tenures
+ $('lnTenures').innerHTML=[1,2,3,4,5,6].map(y=>{const e=emiCalc(L,LN.rate,y);return`<div class="${y===LN.yrs?'on':''}" onclick="LN.yrs=${y};loanCalc()"><small>${y} year${y>1?'s':''} · ${y*12} months</small><b>${tk(e)}</b><small>per month</small><small style="margin-top:6px">Interest: ${tk(e*y*12-L)}</small></div>`}).join('');
+ // schedule
+ const r=LN.rate/12/100;let bal=L,rows='';
+ for(let y=1;y<=LN.yrs;y++){let pp=0,ip=0;for(let m=0;m<12;m++){const int=bal*r,pr=E-int;ip+=int;pp+=pr;bal-=pr}
+  const paidPct=Math.round((1-Math.max(bal,0)/L)*100);
+  rows+=`<tr><td><b>Year ${y}</b></td><td>${tk(E*12)}</td><td>${tk(pp)}</td><td style="color:#f0a050">${tk(ip)}</td><td><b>${tk(Math.max(bal,0))}</b></td><td style="min-width:120px"><div class="prog"><i style="width:${paidPct}%"></i></div><small class="muted">${paidPct}% loan repaid</small></td></tr>`}
+ $('lnSched').innerHTML=`<tr><th>Year</th><th>You pay (12 EMIs)</th><th>Goes to loan</th><th>Goes to interest</th><th>Loan left</th><th>Progress</th></tr>`+rows+`<tr><td><b class="gold">Total</b></td><td><b>${tk(T)}</b></td><td><b>${tk(L)}</b></td><td style="color:#f0a050"><b>${tk(I)}</b></td><td>BDT 0</td><td></td></tr>`;
+}
+function loanWA(){const D=LN.price*LN.down/100,E=emiCalc(LN.price-D,LN.rate,LN.yrs);const c=$('lnCar').value?carName(cars.find(x=>x.id==$('lnCar').value))+' — ':'';
+ waMsg(`Hi, I want a car loan. ${c}Car price: ${tk(LN.price)}, down payment ${LN.down}% (${tk(D)}), ${LN.yrs} years at ${LN.rate}%. Estimated EMI: ${tk(E)}/month.`)}
+function initLoan(){
+ $('lnCar').innerHTML+=cars.filter(c=>c.price).map(c=>`<option value="${c.id}">${c.year} ${carName(c)} — ${fmt(c.price)}</option>`).join('');
+ $('lnCar').onchange=e=>{const c=cars.find(x=>x.id==e.target.value);if(c){LN.price=c.price;loanCalc()}};
+ $('lnPrice').oninput=e=>{LN.price=num(e.target.value);$('lnCar').value='';loanCalc();const i=$('lnPrice');i.setSelectionRange(i.value.length,i.value.length)};
+ $('lnPriceR').oninput=e=>{LN.price=+e.target.value;$('lnCar').value='';loanCalc()};
+ $('lnDownPct').oninput=e=>{LN.down=Math.min(90,Math.max(0,num(e.target.value)));loanCalc()};
+ $('lnDownAmt').oninput=e=>{LN.down=Math.min(90,Math.max(0,+(num(e.target.value)/LN.price*100).toFixed(2)));loanCalc()};
+ $('lnDownAmt').onblur=$('lnDownPct').onblur=$('lnRate').onblur=loanCalc;
+ $('lnRate').oninput=e=>{LN.rate=num(e.target.value)||0.01;loanCalc()};
+ $('lnRateR').oninput=e=>{LN.rate=+e.target.value;loanCalc()};
+ document.querySelectorAll('#lnDownChips button').forEach(b=>b.onclick=()=>{LN.down=+b.dataset.v;loanCalc()});
+ document.querySelectorAll('#lnYrChips button').forEach(b=>b.onclick=()=>{LN.yrs=+b.dataset.v;loanCalc()});
+ loanCalc();
+}
+function loanFor(id){const c=cars.find(x=>x.id===id);if(c&&c.price){LN.price=c.price;$('lnCar').value=id}go('loan');loanCalc()}
+
+function buildEMI(el,price){
+ $(el).innerHTML=`<div>
+  <div class="sl"><div class="top"><label style="margin:0">Car price</label><b id="${el}pO"></b></div><input type="range" id="${el}p" min="1000000" max="60000000" step="100000" value="${price}"></div>
+  <div class="sl"><div class="top"><label style="margin:0">Down payment</label><b id="${el}dO"></b></div><input type="range" id="${el}d" min="10" max="90" value="20"></div>
+  <div class="sl"><div class="top"><label style="margin:0">Interest rate (yearly)</label><b id="${el}rO"></b></div><input type="range" id="${el}r" min="7" max="16" step="0.25" value="10"></div>
+  <div class="sl"><div class="top"><label style="margin:0">Loan tenure</label><b id="${el}tO"></b></div><input type="range" id="${el}t" min="1" max="6" value="5"></div>
+ </div>
+ <div class="out"><small class="muted">Estimated monthly EMI</small><div class="big" id="${el}emi"></div>
+  <div class="bars"><i id="${el}b1" style="background:var(--gold)"></i><i id="${el}b2" style="background:#5a4a22"></i></div>
+  <div style="display:flex;gap:16px;font-size:12px" class="muted"><span><span class="gold">■</span> Principal</span><span><span style="color:#5a4a22">■</span> Interest</span></div>
+  <div class="rows" style="margin-top:14px"><div><span class="muted">Loan amount</span><b id="${el}la"></b></div><div><span class="muted">Total interest</span><b id="${el}ti"></b></div><div><span class="muted">Total payable</span><b id="${el}tp"></b></div></div>
+  <button class="btn wa sm" style="margin-top:18px" onclick="waMsg('Hi, I would like help with a car loan. My estimated EMI is '+document.getElementById('${el}emi').textContent)">Get loan help on WhatsApp</button>
+ </div>`;
+ const upd=()=>{const P=+$(el+'p').value,d=+$(el+'d').value,r=+$(el+'r').value,t=+$(el+'t').value,L=P*(1-d/100),E=emiCalc(L,r,t),T=E*t*12;
+  $(el+'pO').textContent='BDT '+lakh(P);$(el+'dO').textContent=d+'% (BDT '+lakh(P*d/100)+')';$(el+'rO').textContent=r+'%';$(el+'tO').textContent=t+' years';
+  $(el+'emi').textContent='BDT '+Math.round(E).toLocaleString('en-IN');$(el+'la').textContent='BDT '+Math.round(L).toLocaleString('en-IN');$(el+'ti').textContent='BDT '+Math.round(T-L).toLocaleString('en-IN');$(el+'tp').textContent='BDT '+Math.round(T).toLocaleString('en-IN');
+  $(el+'b1').style.width=(L/T*100)+'%';$(el+'b2').style.width=((T-L)/T*100)+'%'};
+ ['p','d','r','t'].forEach(k=>$(el+k).oninput=upd);upd();
+}
+
+/* ===================== COMPARE ===================== */
+function renderCompare(){
+ const A=cars.find(c=>c.id==$('cmpA').value),B=cars.find(c=>c.id==$('cmpB').value);
+ const cc=c=>`<img src="${c.img}" onerror="${fallback}"><div class="in"><span class="tag">${c.cond}</span><h3 class="serif" style="font-size:22px;margin:8px 0 2px">${carName(c)}</h3><div class="gold" style="font-weight:700">${fmt(c.price)}</div><div style="display:flex;gap:8px;margin-top:12px"><button class="btn sm" onclick="go('detail',${c.id})">View</button><button class="btn wa sm" onclick="interested(${c.id})">WhatsApp</button></div></div>`;
+ $('cmpCardA').innerHTML=cc(A);$('cmpCardB').innerHTML=cc(B);
+ const eco=c=>c.fuel==='Electric'?null:c.kmpl;
+ const rows=[
+  ['Price',fmt(A.price),fmt(B.price),A.price&&B.price?(A.price<B.price?'a':A.price>B.price?'b':''):''],
+  ['Fuel economy (mileage)',eco(A)?A.kmpl+' km/l':(A.range+' km range'),eco(B)?B.kmpl+' km/l':(B.range+' km range'),eco(A)&&eco(B)?(A.kmpl>B.kmpl?'a':A.kmpl<B.kmpl?'b':''):''],
+  ['Odometer',A.km.toLocaleString('en-IN')+' km',B.km.toLocaleString('en-IN')+' km',A.km<B.km?'a':A.km>B.km?'b':''],
+  ['Year',A.year,B.year,A.year>B.year?'a':A.year<B.year?'b':''],
+  ['Condition',A.cond,B.cond,''],['Engine',A.cc?A.cc+' cc':'Electric',B.cc?B.cc+' cc':'Electric',''],
+  ['Fuel type',A.fuel,B.fuel,''],['Transmission',A.trans,B.trans,''],['Body',A.body,B.body,''],
+  ['Seats',A.seats,B.seats,A.seats>B.seats?'a':A.seats<B.seats?'b':''],['Colour',A.color,B.color,''],['Status',A.status,B.status,'']
+ ];
+ const mx=Math.max(A.kmpl||0,B.kmpl||0)||1;
+ $('cmpTable').innerHTML=`<tr><th></th><th>${carName(A)}</th><th>${carName(B)}</th></tr>`+rows.map(r=>`<tr><td>${r[0]}</td><td class="${r[3]==='a'?'win':''}">${r[1]}${r[0].startsWith('Fuel economy')&&A.kmpl?`<div class="barcmp"><i style="width:${A.kmpl/mx*100}%"></i></div>`:''}</td><td class="${r[3]==='b'?'win':''}">${r[2]}${r[0].startsWith('Fuel economy')&&B.kmpl?`<div class="barcmp"><i style="width:${B.kmpl/mx*100}%"></i></div>`:''}</td></tr>`).join('');
+}
+
+/* ===================== TEST DRIVE ===================== */
+let tdDay=null,tdSlot=null;
+function buildTDCal(){
+ const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];let h=days.map(d=>`<div class="h">${d}</div>`).join('');
+ for(let i=0;i<0;i++)h+='<div></div>'; // Nov 1 2026 is Sunday
+ for(let d=1;d<=30;d++)h+=`<div class="d ${d<7?'off':''}" data-d="${d}" onclick="pickDay(${d},this)">${d}</div>`;
+ $('tdCal').innerHTML=h;
+}
+function pickDay(d,el){
+ tdDay=d;tdSlot=null;document.querySelectorAll('#tdCal .d').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');
+ const isFri=new Date(2026,10,d).getDay()===5,taken=(tdBookings[d]||[]).map(b=>b[0]);
+ const sl=(isFri?['15:00','16:00','17:00','18:00','19:00']:['10:00','11:00','12:00','13:00','15:00','16:00','17:00','18:00','19:00']);
+ $('tdSlots').innerHTML=sl.map(s=>`<button class="${taken.includes(s)?'full':''}" onclick="tdSlot='${s}';document.querySelectorAll('#tdSlots button').forEach(b=>b.classList.remove('sel'));this.classList.add('sel')">${s}</button>`).join('');
+}
+function bookTD(){
+ if(!tdDay||!tdSlot)return toast('Please pick a date and time slot');
+ const c=cars.find(x=>x.id==$('tdCar').value),nm=val('tdName')||'Guest (demo)';
+ const sp=addLead(nm,val('tdPhone')||'01XXXXXXXXX','TestDrive',carName(c));
+ (tdBookings[tdDay]=tdBookings[tdDay]||[]).push([tdSlot,nm,c.model,sp]);
+ modal(`<div style="text-align:center"><div style="font-size:46px">✅</div><h3 style="margin:10px 0">Test drive booked!</h3><p><b>${carName(c)}</b><br>${tdDay} November 2026 at ${tdSlot}</p><p class="muted" style="font-size:13px;margin-top:12px">Confirmation SMS sent. Your advisor <b class="gold">${sales[sp].n}</b> will contact you on WhatsApp.</p><div style="display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap"><button class="btn sm" onclick="closeModal();openCRM('cal')">See it in CRM calendar →</button><button class="btn ghost sm" onclick="closeModal()">Close</button></div></div>`);
+ pickDay(tdDay,document.querySelector(`#tdCal .d[data-d="${tdDay}"]`));
+}
+
+/* ===================== CHECKOUT (Online Purchase) ===================== */
+let coCar=null;
+function renderCheckout(id,step){
+ if(id)coCar=cars.find(x=>x.id===id);const c=coCar,dep=c.price?Math.min(500000,Math.round(c.price*0.02)):200000;
+ const st=['Reserve car','Your details','Payment','Confirmed'];
+ let body='';
+ if(step===1)body=`<div class="grid" style="grid-template-columns:1fr 1fr;gap:24px"><div class="cmp-card"><img src="${c.img}" onerror="${fallback}"><div class="in"><h3 class="serif" style="font-size:24px">${carName(c)}</h3><p class="muted">${c.year} · ${c.cond} · ${c.color}</p></div></div><div class="form-card"><h3>Reserve this car online</h3><p class="muted" style="font-size:14px;margin:10px 0 18px">Pay a refundable booking deposit to hold this car for 72 hours while you arrange the full payment or bank loan.</p><div class="emi" style="display:block;padding:0;border:0;background:none"><div class="rows"><div><span class="muted">Car price</span><b>${fmt(c.price)}</b></div><div><span class="muted">Booking deposit</span><b class="gold">BDT ${dep.toLocaleString('en-IN')}</b></div><div><span class="muted">Balance at showroom</span><b>${c.price?'BDT '+(c.price-dep).toLocaleString('en-IN'):'As quoted'}</b></div></div></div><button class="btn" style="width:100%;justify-content:center;margin-top:20px" onclick="renderCheckout(0,2)">Continue →</button></div></div>`;
+ if(step===2)body=`<div class="form-card" style="max-width:700px;margin:auto"><h3 style="margin-bottom:16px">Your details</h3><div class="f2"><div><label>Full name</label><input id="coN" placeholder="Name"></div><div><label>Phone</label><input id="coP" placeholder="01XXXXXXXXX"></div><div><label>Email</label><input placeholder="you@email.com"></div><div><label>NID number</label><input placeholder="For booking paper"></div><div class="full"><label>Payment plan</label><select><option>Full payment</option><option>Bank loan</option><option>Trade-in + balance</option></select></div></div><div style="display:flex;justify-content:space-between;margin-top:22px"><button class="btn ghost" onclick="renderCheckout(0,1)">← Back</button><button class="btn" onclick="window._coN=document.getElementById('coN').value;window._coP=document.getElementById('coP').value;renderCheckout(0,3)">Continue to payment →</button></div></div>`;
+ if(step===3)body=`<div class="form-card" style="max-width:700px;margin:auto"><h3 style="margin-bottom:16px">Pay booking deposit — BDT ${dep.toLocaleString('en-IN')}</h3><div class="pay"><input type="radio" name="pm" id="pm1" checked><label for="pm1">bKash</label><input type="radio" name="pm" id="pm2"><label for="pm2">Nagad</label><input type="radio" name="pm" id="pm3"><label for="pm3">Card</label><input type="radio" name="pm" id="pm4"><label for="pm4">Bank transfer</label></div><p class="muted" style="font-size:12px;margin-top:14px">🔒 Secure payment gateway (e.g. SSLCommerz) will be connected on the live site.</p><div style="display:flex;justify-content:space-between;margin-top:22px"><button class="btn ghost" onclick="renderCheckout(0,2)">← Back</button><button class="btn" onclick="addLead(window._coN||'Online buyer (demo)',window._coP||'01XXXXXXXXX','Website','Reserved: '+carName(coCar));coCar.status='Reserved';renderAllCards();renderCheckout(0,4)">Pay & Reserve</button></div></div>`;
+ if(step===4)body=`<div class="form-card" style="max-width:600px;margin:auto;text-align:center"><div style="font-size:54px">🎉</div><h2 class="serif" style="font-size:30px;margin:10px 0">Car reserved!</h2><p><b>${carName(c)}</b> is now on hold for you for 72 hours.</p><p class="muted" style="font-size:14px;margin-top:10px">Booking ID: AM-${Date.now().toString().slice(-6)} · Receipt sent by SMS & email.</p><div style="display:flex;gap:10px;justify-content:center;margin-top:22px;flex-wrap:wrap"><button class="btn" onclick="go('home')">Back to home</button><button class="btn ghost" onclick="openCRM('leads')">See lead in CRM →</button></div></div>`;
+ $('coWrap').innerHTML=`<h1 class="serif" style="font-size:36px;margin-bottom:20px">Online Reservation</h1><div class="steps">${st.map((s,i)=>`<div class="${i+1<step?'done':i+1===step?'on':''}">${i+1<step?'✓':i+1}. ${s}</div>`).join('')}</div>${body}`;
+ window.scrollTo({top:0});
+}
+
+/* ===================== CRM ===================== */
+function addLead(name,phone,src,car,silent){
+ const sp=rr++%sales.length;
+ leads.unshift({id:Date.now(),name,phone,src,car,status:'New',sp,time:'Just now',hist:[[(src==='WhatsApp'?'WhatsApp message':src==='TestDrive'?'Test drive booking':'Website form')+' about '+car,'Just now'],['Auto-assigned to '+sales[sp].n,'Just now']]});
+ renderCRM();return sp;
+}
+function simulateWA(){const nm=['Rafiul Karim','Sumaiya Haque','Tahmid Rahman','Jannat Ara','Asif Mahmud'][Math.floor(Math.random()*5)],c=cars[Math.floor(Math.random()*cars.length)];const sp=addLead(nm,'017'+Math.floor(10000000+Math.random()*9e7),'WhatsApp',carName(c));toast(`💬 New WhatsApp lead from <b>${nm}</b> → assigned to <b class="gold">${sales[sp].n}</b>`)}
+function av(i){return `<span class="av" style="background:${sales[i].c}" title="${sales[i].n}">${sales[i].n.split(' ').map(x=>x[0]).join('')}</span>`}
+function leadRow(l,full){
+ return `<tr><td><a onclick="openLead(${l.id})"><b>${l.name}</b></a><br><small class="muted">${l.phone}</small></td><td><span class="src ${l.src}">${l.src==='TestDrive'?'Test Drive':l.src}</span></td><td>${l.car}</td>
+ ${full?`<td><select onchange="setLead(${l.id},'status',this.value)">${['New','Contacted','Follow-up','Closed'].map(s=>`<option ${s===l.status?'selected':''}>${s}</option>`).join('')}</select></td><td><div style="display:flex;align-items:center;gap:6px">${av(l.sp)}<select onchange="setLead(${l.id},'sp',+this.value)">${sales.map((s,i)=>`<option value="${i}" ${i===l.sp?'selected':''}>${s.n}</option>`).join('')}</select></div></td><td class="muted">${l.time}</td><td><button class="btn ghost sm" onclick="openLead(${l.id})">History</button></td>`
+ :`<td><span class="pill ${l.status}">${l.status}</span></td><td>${av(l.sp)}</td>`}</tr>`;
+}
+function setLead(id,k,v){const l=leads.find(x=>x.id===id);l[k]=v;l.hist.push([k==='sp'?'Reassigned to '+sales[v].n:'Status changed to '+v,'Just now']);renderCRM();toast('✓ Lead updated')}
+function openLead(id){const l=leads.find(x=>x.id===id);$('drawer').innerHTML=`<button class="x" style="float:right;background:none;border:0;color:var(--muted);font-size:26px" onclick="$('drawer').classList.remove('show')">×</button><span class="src ${l.src}">${l.src==='TestDrive'?'Test Drive':l.src}</span><h2 style="margin:10px 0 4px">${l.name}</h2><p class="muted">${l.phone}</p><div style="display:flex;gap:8px;margin:16px 0"><button class="btn wa sm" onclick="waMsg('Hi ${l.name}, this is ${sales[l.sp].n} from Auto Museum…')">WhatsApp</button><button class="btn ghost sm">Call</button></div><div class="panel"><small class="muted">Interested car</small><b style="display:block">${l.car}</b><small class="muted" style="display:block;margin-top:10px">Salesperson</small><div style="display:flex;gap:8px;align-items:center">${av(l.sp)} ${sales[l.sp].n}</div><small class="muted" style="display:block;margin-top:10px">Status</small><span class="pill ${l.status}">${l.status}</span></div><h3 style="font-size:15px">Activity history</h3><div class="tl">${l.hist.map(h=>`<div>${h[0]}<small>${h[1]}</small></div>`).join('')}</div><label style="margin-top:18px">Add note</label><textarea id="noteIn" rows="3" placeholder="e.g. Customer wants loan option"></textarea><div style="display:flex;gap:8px;margin-top:10px"><button class="btn sm" onclick="const v=document.getElementById('noteIn').value;if(v){leads.find(x=>x.id===${l.id}).hist.push(['Note: '+v,'Just now']);openLead(${l.id})}">Save note</button><button class="btn ghost sm" onclick="toast('⏰ Follow-up reminder set for tomorrow 11:00')">Set reminder</button></div>`;$('drawer').classList.add('show')}
+function renderLeads(){const s=$('lfSrc').value,p=$('lfSp').value;const r=leads.filter(l=>(!s||l.src===s)&&(p===''||l.sp==p));$('leadTable').innerHTML=`<tr><th>Customer</th><th>Source</th><th>Interested car</th><th>Status</th><th>Assigned to</th><th>Time</th><th></th></tr>`+r.map(l=>leadRow(l,true)).join('')}
+function renderCRM(){
+ const nw=leads.filter(l=>l.status==='New').length;$('newCnt').textContent=nw;
+ const tdCount=Object.values(tdBookings).flat().length;
+ $('kpis').innerHTML=[['New leads',nw,'+'+nw+' today'],['Total leads (month)',leads.length+128,'▲ 18% vs Oct'],['Test drives booked',tdCount,'this month'],['Cars in stock',cars.filter(c=>c.status!=='Sold').length,cars.filter(c=>c.status==='Reserved').length+' reserved']].map(k=>`<div class="kpi"><small>${k[0]}</small><b>${k[1]}</b><span class="up">${k[2]}</span></div>`).join('');
+ $('dashLeads').innerHTML=`<tr><th>Customer</th><th>Source</th><th>Car</th><th>Status</th><th>Owner</th></tr>`+leads.slice(0,6).map(l=>leadRow(l,false)).join('');
+ $('todayTD').innerHTML=(tdBookings[7]||[]).map(b=>`<div style="display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)"><b class="gold" style="width:50px">${b[0]}</b><div style="flex:1"><b style="font-size:14px">${b[1]}</b><br><small class="muted">${b[2]}</small></div>${av(b[3])}</div>`).join('')||'<p class="muted">No test drives today</p>';
+ renderLeads();
+ $('kanban').innerHTML=['New','Contacted','Follow-up','Closed'].map(s=>{const L=leads.filter(l=>l.status===s);return`<div class="kcol"><h4>${s}<span>${L.length}</span></h4>${L.map(l=>`<div class="kcard" onclick="openLead(${l.id})"><b>${l.name}</b><div class="muted" style="font-size:12px;margin:4px 0">${l.car}</div><div style="display:flex;justify-content:space-between;align-items:center"><span class="src ${l.src}">${l.src==='TestDrive'?'Test Drive':l.src}</span>${av(l.sp)}</div></div>`).join('')}</div>`}).join('');
+ // calendar
+ let h=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].map(d=>`<div class="h">${d}</div>`).join('');
+ for(let d=1;d<=30;d++){const b=tdBookings[d]||[];h+=`<div class="c ${d===7?'today':''}" onclick="calDay(${d})"><b>${d}</b>${b.slice(0,3).map(x=>`<span class="ev" style="border-left:3px solid ${sales[x[3]].c}">${x[0]} ${x[1]}</span>`).join('')}${b.length>3?`<small class="muted">+${b.length-3} more</small>`:''}</div>`}
+ $('crmCal').innerHTML=h;
+ // team
+ $('spCards').innerHTML=sales.map((s,i)=>{const L=leads.filter(l=>l.sp===i),cl=L.filter(l=>l.status==='Closed').length,td=Object.values(tdBookings).flat().filter(b=>b[3]===i).length;return`<div class="sp-card"><div class="row">${av(i)}<div><b>${s.n}</b><br><small class="muted">Sales Executive</small></div></div><div class="rows" style="font-size:13px"><div style="display:flex;justify-content:space-between"><span class="muted">Active leads</span><b>${L.length}</b></div><div style="display:flex;justify-content:space-between"><span class="muted">Test drives</span><b>${td}</b></div><div style="display:flex;justify-content:space-between"><span class="muted">Deals closed</span><b>${cl}</b></div></div><small class="muted" style="display:block;margin-top:10px">Monthly target</small><div class="prog"><i style="width:${30+i*15+cl*10}%"></i></div><button class="btn ghost sm" style="margin-top:12px;width:100%;justify-content:center" onclick="$('lfSp').value=${i};crmView('leads')">View their leads</button></div>`}).join('');
+ // stock
+ $('stockTable').innerHTML=`<tr><th>Car</th><th>Condition</th><th>Price (BDT)</th><th>Status</th><th>Views</th><th>Leads</th></tr>`+cars.map(c=>`<tr><td><div style="display:flex;gap:10px;align-items:center"><img src="${c.img}" onerror="${fallback}" style="width:56px;height:36px;object-fit:cover;border-radius:5px"><b>${carName(c)}</b> <small class="muted">${c.year}</small></div></td><td>${c.cond}</td><td><input type="number" value="${c.price??''}" placeholder="Contact for price" style="width:150px" onchange="updPrice(${c.id},this.value)"></td><td><select onchange="updSt(${c.id},this.value)">${['Available','Reserved','Sold'].map(s=>`<option ${s===c.status?'selected':''}>${s}</option>`).join('')}</select></td><td>${(c.id*137)%900+120}</td><td>${leads.filter(l=>l.car.includes(c.model)).length}</td></tr>`).join('');
+}
+function updPrice(id,v){const c=cars.find(x=>x.id===id),old=c.price;c.price=v?+v:null;renderAllCards();toast(`✓ Price updated on website: ${fmt(old)} → ${fmt(c.price)}`)}
+function updSt(id,v){cars.find(x=>x.id===id).status=v;renderAllCards();renderCRM();toast('✓ Status updated on website: '+v)}
+function calDay(d){const b=tdBookings[d]||[];$('calDayTitle').textContent=`Test drives — ${d} November 2026 (${b.length})`;$('calDayList').innerHTML=b.length?`<table class="dt"><tr><th>Time</th><th>Customer</th><th>Car</th><th>Salesperson</th></tr>${b.map(x=>`<tr><td class="gold"><b>${x[0]}</b></td><td>${x[1]}</td><td>${x[2]}</td><td><div style="display:flex;gap:8px;align-items:center">${av(x[3])}${sales[x[3]].n}</div></td></tr>`).join('')}</table>`:'<p class="muted">No bookings on this day.</p>'}
+function crmView(v){document.querySelectorAll('.crm-view').forEach(x=>x.classList.remove('show'));$('v-'+v).classList.add('show');document.querySelectorAll('.crm-side a[data-v]').forEach(a=>a.classList.toggle('on',a.dataset.v===v));if(v==='leads')renderLeads();window.scrollTo({top:0})}
+function openCRM(v){$('site').style.display='none';$('crm').classList.add('show');renderCRM();crmView(v||'dash');if(v==='cal')calDay(tdDay||7)}
+function closeCRM(){$('crm').classList.remove('show');$('site').style.display='block';$('drawer').classList.remove('show');window.scrollTo({top:0})}
+
+/* ===================== i18n ===================== */
+const T={bn:{nav_home:'হোম',nav_inv:'গাড়ির তালিকা',nav_cmp:'তুলনা',nav_loan:'কার লোন',nav_td:'টেস্ট ড্রাইভ',nav_sell:'গাড়ি বিক্রি',nav_about:'আমাদের সম্পর্কে',nav_contact:'যোগাযোগ',
+ hero_eye:'ঢাকার বাছাই করা গাড়ির সংগ্রহ',hero_h:'প্রতিটি গাড়ির আছে <i>একটি গল্প</i>, যা চালানোর মতো।',hero_p:'নতুন, রিকন্ডিশন্ড, প্রি-ওনড ও ইলেকট্রিক গাড়ি — পরীক্ষিত, কাগজপত্রসহ, আপনার টেস্ট ড্রাইভের জন্য প্রস্তুত।',
+ btn_explore:'গাড়ি দেখুন →',btn_td:'টেস্ট ড্রাইভ বুক করুন',disc_h:'আপনার পরবর্তী গাড়ি খুঁজুন',q_loan:'কার লোন ক্যালকুলেটর',q_td:'টেস্ট ড্রাইভ বুকিং',q_cmp:'গাড়ি তুলনা',q_sell:'বিক্রি / ট্রেড-ইন',
+ story_eye:'আমাদের গল্প',story_h:'শুধু শোরুম নয় — সেরা গাড়ির এক জাদুঘর।',prod_eye:'বিশেষ সংগ্রহ',prod_h:'শোরুমে সদ্য এসেছে',inv_h:'অটো মিউজিয়াম কালেকশন',cmp_h:'দুটি গাড়ির তুলনা',loan_h:'কার লোন ক্যালকুলেটর',td_h:'টেস্ট ড্রাইভ বুক করুন',sell_h:'আপনার গাড়ি বিক্রি বা ট্রেড-ইন করুন',about_h:'অটো মিউজিয়ামের গল্প',contact_h:'আসুন · কল করুন · চ্যাট করুন'}};
+const EN={};document.querySelectorAll('[data-i18n]').forEach(e=>EN[e.dataset.i18n]=e.textContent);document.querySelectorAll('[data-i18n-html]').forEach(e=>EN[e.dataset.i18nHtml]=e.innerHTML);
+function setLang(l,btn){document.querySelectorAll('.lang button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');document.body.classList.toggle('bn',l==='bn');
+ document.querySelectorAll('[data-i18n]').forEach(e=>e.textContent=l==='bn'?(T.bn[e.dataset.i18n]||EN[e.dataset.i18n]):EN[e.dataset.i18n]);
+ document.querySelectorAll('[data-i18n-html]').forEach(e=>e.innerHTML=l==='bn'?T.bn[e.dataset.i18nHtml]:EN[e.dataset.i18nHtml]);
+ toast(l==='bn'?'বাংলা ভাষা চালু (ডেমো: প্রধান অংশ অনুবাদ করা হয়েছে)':'English enabled')}
+
+/* ===================== INIT ===================== */
+(function(){
+ const bs=[...new Set(cars.map(c=>c.brand))].sort();
+ ['hBrand','fBrand'].forEach(i=>$(i).innerHTML+=bs.map(b=>`<option>${b}</option>`).join(''));
+ const opts=cars.map(c=>`<option value="${c.id}">${c.year} ${carName(c)}</option>`).join('');
+ $('cmpA').innerHTML=opts;$('cmpB').innerHTML=opts;$('cmpA').value=4;$('cmpB').value=7;$('tdCar').innerHTML=opts;
+ $('lfSp').innerHTML+=sales.map((s,i)=>`<option value="${i}">${s.n}</option>`).join('');
+ $('marq').innerHTML=[...brands,...brands].map(b=>`<span onclick="document.getElementById('fBrand').value='${b}';go('inventory')">${b.toUpperCase()}</span>`).join('');
+ document.querySelectorAll('#homeCond .chip').forEach(b=>b.onclick=()=>{homeCond=b.dataset.c;setChip('homeCond',homeCond)});
+ document.querySelectorAll('#invCond .chip').forEach(b=>b.onclick=()=>{invCond=b.dataset.c;setChip('invCond',invCond);renderInv()});
+ $('modal').onclick=e=>{if(e.target.id==='modal')closeModal()};
+ initLoan();buildTDCal();renderFeatured();renderInv();renderCompare();renderCRM();
+})();
+</script>
+</body>
+</html>
